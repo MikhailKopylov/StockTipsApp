@@ -1,2 +1,6 @@
 rootProject.name = "StockTipsApp"
 include ':app'
+include ':source'
+include ':source:core'
+include ':source:company_list'
+include ':source:candle_chart'
