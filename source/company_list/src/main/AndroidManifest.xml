@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.amk.company_list">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application>
         <activity android:name=".CompanyListActivity">
             <intent-filter>
