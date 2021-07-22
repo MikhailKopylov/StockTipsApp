@@ -1,0 +1,27 @@
+package ru.amk.core.moex_model.company.json
+
+import ru.amk.core.moex_model.company.json.metadata.*
+
+data class Metadata(
+    val ADMITTEDQUOTE: ADMITTEDQUOTE,
+    val ADMITTEDVALUE: ADMITTEDVALUE,
+    val BOARDID: BOARDID,
+    val CLOSE: CLOSE,
+    val HIGH: HIGH,
+    val LEGALCLOSEPRICE: LEGALCLOSEPRICE,
+    val LOW: LOW,
+    val MARKETPRICE2: MARKETPRICE2,
+    val MARKETPRICE3: MARKETPRICE3,
+    val MARKETPRICE3TRADESVALUE: MARKETPRICE3TRADESVALUE,
+    val MP2VALTRD: MP2VALTRD,
+    val NUMTRADES: NUMTRADES,
+    val OPEN: OPEN,
+    val SECID: SECID,
+    val SHORTNAME: SHORTNAME,
+    val TRADEDATE: TRADEDATE,
+    val TRADINGSESSION: TRADINGSESSION,
+    val VALUE: VALUE,
+    val VOLUME: VOLUME,
+    val WAPRICE: WAPRICE,
+    val WAVAL: WAVAL
+)

@@ -3,7 +3,7 @@ package ru.amk.company_list.list
 import android.annotation.SuppressLint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import ru.amk.company_list.repository.CompanyRepository
-import ru.amk.core.Company
+import ru.amk.core.company.Company
 
 class CompanyListPresenterImpl(
     private val companyRepository: CompanyRepository,

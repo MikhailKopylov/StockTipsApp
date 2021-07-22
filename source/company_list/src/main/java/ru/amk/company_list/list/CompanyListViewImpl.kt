@@ -3,7 +3,7 @@ package ru.amk.company_list.list
 import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.RecyclerView
-import ru.amk.core.Company
+import ru.amk.core.company.Company
 
 class CompanyListViewImpl @JvmOverloads constructor(
     context: Context,

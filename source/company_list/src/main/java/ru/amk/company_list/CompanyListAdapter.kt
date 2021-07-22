@@ -2,6 +2,7 @@ package ru.amk.company_list
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.amk.company_list.di.DiContainerCompanyList
 import ru.amk.company_list.item.ItemCompanyPresenter
@@ -17,7 +18,14 @@ class CompanyListAdapter(
     }
 
     class CompanyViewHolder(itemView: View, val itemCompanyPresenter: ItemCompanyPresenter) :
-        RecyclerView.ViewHolder(itemView)
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+        override fun onClick(v: View) {
+            Toast.makeText(v.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {

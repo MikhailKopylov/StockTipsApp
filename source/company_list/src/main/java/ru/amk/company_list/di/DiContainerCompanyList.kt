@@ -16,12 +16,12 @@ import ru.amk.company_list.list.CompanyListPresenterImpl
 import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.company_list.repository.CompanyRepository
 import ru.amk.company_list.repository.CompanyRepositoryImpl
-import ru.amk.core.CompanyRepositoryCoreNetwork
+import ru.amk.core.company.CompanyRepositoryCoreNetwork
 import ru.amk.core.di.DiContainerCore
 
 class DiContainerCompanyList(context: Context) {
     private val companyRepository: CompanyRepository = CompanyRepositoryImpl(
-        CompanyRepositoryCoreNetwork(DiContainerCore().moexCandleService)
+        CompanyRepositoryCoreNetwork(DiContainerCore().moexCandleServiceNetwork)
     )
 
     private lateinit var _rootView:View
