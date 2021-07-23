@@ -3,5 +3,6 @@ package ru.amk.core.company
 
 data class Company(
     val shortName: String,
-    val secId: String
+    val secId: String,
+    val date:String
 )

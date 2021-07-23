@@ -8,10 +8,10 @@ import ru.amk.core.moex_model.company.MoexData
 class CandleRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCandleServiceNetwork) :
     CandleRepositoryCore {
 
-    override fun getCandleList(): Single<List<Candle>> {
+    override fun getCandleList(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>> {
         val listCompany = mutableListOf<Candle>()
         return moexCandleServiceNetwork
-            .getMoexCandleServiceByCompany()
+            .getMoexCandleServiceByCompany(secId, dataFrom, dataTill)
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {

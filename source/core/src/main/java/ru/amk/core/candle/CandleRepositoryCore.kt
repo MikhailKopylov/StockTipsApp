@@ -4,5 +4,5 @@ import io.reactivex.Single
 
 interface CandleRepositoryCore {
 
-    fun getCandleList(): Single<List<Candle>>
+    fun getCandleList(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>>
 }

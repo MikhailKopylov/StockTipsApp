@@ -9,5 +9,5 @@ class CompanyRepositoryImpl(
 ) : CompanyRepository {
 
     override fun getAllCompany(): Single<List<Company>> =
-        companyRepositoryCore.getCompanyList()
+        companyRepositoryCore.getCompanyList(companyRepositoryCore.getCurrentDate())
 }

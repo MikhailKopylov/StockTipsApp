@@ -1,6 +1,8 @@
 package ru.amk.company_list
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,8 +10,13 @@ import ru.amk.company_list.di.DiContainerCompanyList
 
 class CompanyListActivity : AppCompatActivity() {
 
+    companion object {
+        fun startCompanyListActivity(context: Context) {
+            context.startActivity(Intent(context, CompanyListActivity::class.java))
+        }
+    }
 
-    private lateinit var diContainer:DiContainerCompanyList
+    private lateinit var diContainer: DiContainerCompanyList
 
     @SuppressLint("CheckResult", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {

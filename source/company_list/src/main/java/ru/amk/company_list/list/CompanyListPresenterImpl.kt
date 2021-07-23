@@ -11,10 +11,10 @@ class CompanyListPresenterImpl(
 ) : CompanyListPresenter {
 
     private var companyList = listOf(
-        Company("1", "1"),
-        Company("2", "2"),
-        Company("3", "3"),
-        Company("4", "4"),
+        Company("1", "1", "2021-12-12"),
+        Company("2", "2", "2021-12-12"),
+        Company("3", "3", "2021-12-12"),
+        Company("4", "4", "2021-12-12"),
     )
 
     @SuppressLint("CheckResult")

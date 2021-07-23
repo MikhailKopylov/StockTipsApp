@@ -2,5 +2,5 @@ package ru.amk.candle_chart.presenter
 
 interface CandleChartPresenter {
 
-    fun onViewCreated()
+    fun onViewCreated(secId:String, dateTill:String)
 }

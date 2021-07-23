@@ -1,26 +1,33 @@
 package ru.amk.core.moex_model.company
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 import ru.amk.core.moex_model.company.json.History
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
 
 class MoexCandleServiceNetwork(private val moexCandleService: MoexCandleService) {
 
+
+    //TODO Не придумал, как динамически, по количеству страниц, сделать запросы и объединить их результаты
     @SuppressLint("CheckResult")
-    fun getMoexCandleServiceAllCompanyByPage(): Single<MoexCandleRaw> =
-        moexCandleService.getMoexCandleAllCompanyByPage(0)
-            .zipWith(moexCandleService.getMoexCandleAllCompanyByPage(100),
+    fun getMoexCandleServiceAllCompanyByPage(date:String): Single<MoexCandleRaw> =
+        moexCandleService.getMoexCandleAllCompanyByPage(0, date)
+            .zipWith(moexCandleService.getMoexCandleAllCompanyByPage(100, date),
                 { a, b ->
                     mergeMoexCandlePage(a, b)
-                }).zipWith(moexCandleService.getMoexCandleAllCompanyByPage(200),
+                }).zipWith(moexCandleService.getMoexCandleAllCompanyByPage(200, date),
                 { a, b ->
                     mergeMoexCandlePage(a, b)
                 })
             .subscribeOn(Schedulers.io())
 
-    fun getMoexCandleServiceByCompany():Single<MoexCandleRaw> =
-        moexCandleService.getMoexCandleByCompany()
+    fun getMoexCandleServiceByCompany(secId:String, dataFrom:String, dataTill:String):Single<MoexCandleRaw> =
+        moexCandleService.getMoexCandleByCompany(secId, dataFrom, dataTill)
 
     private fun mergeMoexCandlePage(
         moexCandleRaw: MoexCandleRaw,

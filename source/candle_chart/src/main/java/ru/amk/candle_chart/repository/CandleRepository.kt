@@ -5,5 +5,5 @@ import ru.amk.core.candle.Candle
 
 interface CandleRepository {
 
-    fun getCandles(): Single<List<Candle>>
+    fun getCandles(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>>
 }

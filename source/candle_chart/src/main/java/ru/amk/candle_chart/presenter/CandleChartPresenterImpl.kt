@@ -1,10 +1,16 @@
 package ru.amk.candle_chart.presenter
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.amk.candle_chart.repository.CandleRepository
 import ru.amk.candle_chart.view.CandleChartView
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.util.*
 
 class CandleChartPresenterImpl(
     private val candleRepository: CandleRepository,
@@ -12,10 +18,15 @@ class CandleChartPresenterImpl(
 ) :
     CandleChartPresenter {
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val periodInDays = Period.of(0,3,0)
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("CheckResult")
-    override fun onViewCreated() {
-        candleRepository.getCandles()
+    override fun onViewCreated(secId:String, dateTill:String) {
+        val dateFrom = prevDate(dateTill)
+        candleRepository.getCandles(secId, dateFrom, dateTill)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -28,4 +39,8 @@ class CandleChartPresenterImpl(
                 candleChartView.showNoData()
             })
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun prevDate(dateTill:String):String = LocalDate.parse(dateTill).minus(periodInDays).toString()
+
 }

@@ -6,6 +6,6 @@ import ru.amk.core.candle.CandleRepositoryCore
 
 class CandleRepositoryImpl(private val candleRepositoryCore: CandleRepositoryCore):CandleRepository {
 
-    override fun getCandles(): Single<List<Candle>> =
-        candleRepositoryCore.getCandleList()
+    override fun getCandles(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>> =
+        candleRepositoryCore.getCandleList(secId, dataFrom, dataTill)
 }

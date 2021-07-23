@@ -4,5 +4,6 @@ import io.reactivex.Single
 
 interface CompanyRepositoryCore {
 
-    fun getCompanyList(): Single<List<Company>>
+    fun getCompanyList(date:String): Single<List<Company>>
+    fun getCurrentDate():String
 }

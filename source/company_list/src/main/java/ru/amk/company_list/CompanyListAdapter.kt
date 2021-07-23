@@ -23,6 +23,7 @@ class CompanyListAdapter(
             itemView.setOnClickListener(this)
         }
         override fun onClick(v: View) {
+            itemCompanyPresenter.onClickItem(adapterPosition)
             Toast.makeText(v.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
         }
     }

@@ -6,6 +6,8 @@
       <module name="StockTipsApp.source.candle_chart" target="11" />
       <module name="StockTipsApp.source.company_list" target="11" />
       <module name="StockTipsApp.source.core" target="11" />
+      <module name="StockTipsApp.source.mylibrary" target="11" />
+      <module name="StockTipsApp.source.navigation" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

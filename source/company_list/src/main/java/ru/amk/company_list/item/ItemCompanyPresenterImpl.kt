@@ -2,6 +2,7 @@ package ru.amk.company_list.item
 
 import ru.amk.company_list.list.CompanyListPresenter
 
+
 class ItemCompanyPresenterImpl(
     private val view: ItemView,
     private val companyListPresenter: CompanyListPresenter
@@ -11,6 +12,13 @@ class ItemCompanyPresenterImpl(
         val company = companyListPresenter.getCompanyByPosition(position)
         view.setCompanyName(company.shortName)
         view.setCompanySetId(company.secId)
+    }
+
+    override fun onClickItem(position: Int) {
+        view.openCandleScreen(
+            companyListPresenter.getCompanyByPosition(position).secId,
+            companyListPresenter.getCompanyByPosition(position).date
+        )
     }
 
 
