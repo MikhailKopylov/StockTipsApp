@@ -9,17 +9,21 @@ import ru.amk.core.company.CompanyRepositoryCoreNetwork
 import ru.amk.core.moex_model.company.MoexCandleService
 import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
 import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
+import javax.inject.Singleton
 
 @Module
 abstract class CoreModule {
 
     @Binds
+    @Singleton
     abstract fun bindMoexCandleServiceNetwork(moexCandleServiceNetwork: MoexCandleServiceNetworkImpl): MoexCandleServiceNetwork
 
     @Binds
+    @Singleton
     abstract fun bindCandleRepositoryCore(candleRepositoryCore: CandleRepositoryCoreNetwork):CandleRepositoryCore
 
     @Binds
+    @Singleton
     abstract fun bindCompanyRepositoryCore(companyRepositoryCore: CompanyRepositoryCoreNetwork):CompanyRepositoryCore
 
 }

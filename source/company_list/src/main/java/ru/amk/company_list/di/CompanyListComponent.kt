@@ -4,6 +4,7 @@ import dagger.BindsInstance
 import dagger.Component
 import ru.amk.company_list.CompanyListActivity
 import ru.amk.company_list.list.CompanyListViewImpl
+import ru.amk.core.di.ActivityScope
 import ru.amk.core.di.AppProvider
 import ru.amk.core.di.CoreComponent
 
@@ -11,6 +12,7 @@ import ru.amk.core.di.CoreComponent
     dependencies = [CoreComponent::class, AppProvider::class],
     modules = [CompanyListModule::class, ItemCompanyModule::class]
 )
+@ActivityScope
 interface CompanyListComponent {
 
     fun inject(activity: CompanyListActivity)
