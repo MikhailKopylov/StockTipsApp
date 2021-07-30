@@ -1,19 +1,15 @@
 package ru.amk.core.moex_model.company
 
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 import ru.amk.core.moex_model.company.json.History
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.util.*
+import javax.inject.Inject
 
 const val START_PAGE = 0
 const val NEXT_PAGE = 100
 
-class MoexCandleServiceNetworkImpl(private val moexCandleService: MoexCandleService) :
+class MoexCandleServiceNetworkImpl @Inject constructor (private val moexCandleService: MoexCandleService) :
     MoexCandleServiceNetwork {
 
 
@@ -40,7 +36,7 @@ class MoexCandleServiceNetworkImpl(private val moexCandleService: MoexCandleServ
             }
             .subscribeOn(Schedulers.io())
 
-    fun getMoexCandleServiceByCompany(
+    override fun getMoexCandleServiceByCompany(
         secId: String,
         dataFrom: String,
         dataTill: String

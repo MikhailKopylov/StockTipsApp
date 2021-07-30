@@ -8,12 +8,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ru.amk.candle_chart.repository.CandleRepository
 import ru.amk.candle_chart.view.CandleChartView
-import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
-import java.util.*
+import javax.inject.Inject
 
-class CandleChartPresenterImpl(
+class CandleChartPresenterImpl @Inject constructor(
     private val candleRepository: CandleRepository,
     private val candleChartView: CandleChartView
 ) :

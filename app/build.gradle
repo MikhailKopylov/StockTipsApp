@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -45,6 +46,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.multidex:multidex:2.0.1"
 
+    //dagger
+    implementation 'com.google.dagger:dagger:2.34'
+    kapt 'com.google.dagger:dagger-compiler:2.34'
+
     implementation project(":source:company_list")
     implementation project(":source:candle_chart")
+    implementation project(":source:core")
 }

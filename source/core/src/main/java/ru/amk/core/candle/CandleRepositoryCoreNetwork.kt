@@ -2,10 +2,11 @@ package ru.amk.core.candle
 
 import io.reactivex.Single
 import ru.amk.core.moex_model.company.CreateMoexCandle
-import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
+import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
 import ru.amk.core.moex_model.company.MoexData
+import javax.inject.Inject
 
-class CandleRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCandleServiceNetworkImpl) :
+class CandleRepositoryCoreNetwork @Inject constructor(private val moexCandleServiceNetwork: MoexCandleServiceNetwork) :
     CandleRepositoryCore {
 
     override fun getCandleList(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>> {

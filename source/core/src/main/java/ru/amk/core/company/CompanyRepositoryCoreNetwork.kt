@@ -4,14 +4,15 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import io.reactivex.Single
-import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
 import ru.amk.core.moex_model.company.CreateMoexCandle
+import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
 import ru.amk.core.moex_model.company.START_PAGE
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
+import javax.inject.Inject
 
-class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCandleServiceNetworkImpl) :
+class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleServiceNetwork: MoexCandleServiceNetwork) :
     CompanyRepositoryCore {
 
     private val _date: String
@@ -26,10 +27,9 @@ class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCan
     private var _prevDate: String = LocalDate.parse(_date).minusDays(1L).toString()
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("CheckResult")
-    override fun getCompanyList(date:String): Single<List<Company>> {
+    override fun getCompanyList(date: String): Single<List<Company>> {
 
         val listCompany = mutableListOf<Company>()
         return moexCandleServiceNetwork
@@ -43,7 +43,7 @@ class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCan
                 if (listCompany.isEmpty()) {
                     _prevDate = LocalDate.parse(date).minusDays(1L).toString()
                     getCompanyList(_prevDate)
-                }else {
+                } else {
                     Single.just(listCompany)
                 }
             }
