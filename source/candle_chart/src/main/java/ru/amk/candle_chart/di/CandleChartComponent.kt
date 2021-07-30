@@ -1,7 +1,9 @@
 package ru.amk.candle_chart.di
 
+import dagger.BindsInstance
 import dagger.Component
 import ru.amk.candle_chart.CandleChartActivity
+import ru.amk.candle_chart.view.CandleChartView
 import ru.amk.core.di.AppProvider
 import ru.amk.core.di.CoreComponent
 
@@ -12,4 +14,17 @@ interface CandleChartComponent {
 
 
     fun inject(activity:CandleChartActivity)
+
+    @Component.Builder
+    interface CandleChartComponentBuilder{
+
+        fun build():CandleChartComponent
+
+        @BindsInstance
+        fun candleChartView(candleChartView: CandleChartView):CandleChartComponentBuilder
+
+        fun coreComponent(coreComponent: CoreComponent):CandleChartComponentBuilder
+
+        fun appProvider(appProvider: AppProvider):CandleChartComponentBuilder
+    }
 }

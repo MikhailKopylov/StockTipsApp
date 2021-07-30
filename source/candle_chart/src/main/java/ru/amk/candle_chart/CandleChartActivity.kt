@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import ru.amk.candle_chart.di.DaggerCandleChartComponent
 import ru.amk.candle_chart.presenter.CandleChartPresenter
+import ru.amk.candle_chart.view.CandleChartView
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import java.text.SimpleDateFormat
@@ -45,7 +46,9 @@ class CandleChartActivity : AppCompatActivity() {
         val secId = intent.getStringExtra(SEC_ID_COMPANY)
         val dateTill = intent.getStringExtra(DATE_TILL)
 
+        val candleChartView:CandleChartView = findViewById(R.id.candle_chart)
         DaggerCandleChartComponent.builder()
+            .candleChartView(candleChartView)
             .appProvider((application as AppWithFacade).getAppProvider())
             .coreComponent(DaggerCoreComponent.create())
             .build()

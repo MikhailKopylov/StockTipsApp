@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.RecyclerView
 import ru.amk.core.company.Company
 
-class CompanyListViewImpl (
+class CompanyListViewImpl  @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
