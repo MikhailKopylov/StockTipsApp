@@ -32,5 +32,8 @@ class CompanyListActivity : AppCompatActivity() {
         companyListRW.adapter = adapter
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        diContainer.companyListPresenter.onCleared()
+    }
 }

@@ -44,9 +44,16 @@ class CandleChartActivity : AppCompatActivity() {
             ?: Toast.makeText(this, "No such secId company", Toast.LENGTH_SHORT).show()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        diContainer.presenter.onCleared()
+    }
+
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun currentDay() = LocalDate.parse(
         SimpleDateFormat("yyyy-MM-dd").format(Date())
     ).minusDays(1L).toString()
+
+
 }

@@ -38,7 +38,7 @@ class DiContainerCompanyList(context: Context) {
     }
 
     val companyListRW: CompanyListViewImpl = (context as Activity).findViewById(R.id.company_list_rw)
-    private val companyListPresenter:CompanyListPresenter = CompanyListPresenterImpl(companyRepository, companyListRW)
+    val companyListPresenter:CompanyListPresenter = CompanyListPresenterImpl(companyRepository, companyListRW)
 
     val companyListAdapter: CompanyListAdapter = CompanyListAdapter(companyListPresenter, this)
 

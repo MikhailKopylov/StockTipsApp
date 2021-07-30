@@ -2,6 +2,7 @@ package ru.amk.company_list.list
 
 import android.annotation.SuppressLint
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import ru.amk.company_list.repository.CompanyRepository
 import ru.amk.core.company.Company
 
@@ -10,6 +11,7 @@ class CompanyListPresenterImpl(
     private val companyListView: CompanyListView
 ) : CompanyListPresenter {
 
+    private val compositeDisposable = CompositeDisposable()
     private var companyList = listOf(
         Company("1", "1", "2021-12-12"),
         Company("2", "2", "2021-12-12"),
@@ -19,18 +21,23 @@ class CompanyListPresenterImpl(
 
     @SuppressLint("CheckResult")
     override fun onViewCreated() {
-        companyRepository.getAllCompany()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                it?.let {
-                    companyList = it
-                    companyListView.notifyAllDataChange(it)
-                }
-            }, {})
+        compositeDisposable.add(
+            companyRepository.getAllCompany()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    it?.let {
+                        companyList = it
+                        companyListView.notifyAllDataChange(it)
+                    }
+                }, {})
+        )
     }
 
     override fun getCompanyByPosition(position: Int): Company = companyList[position]
 
     override fun getCount(): Int = companyList.size
+    override fun onCleared() {
+        compositeDisposable.clear()
+    }
 
 }

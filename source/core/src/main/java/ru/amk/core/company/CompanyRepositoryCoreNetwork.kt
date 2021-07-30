@@ -4,13 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import io.reactivex.Single
-import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
+import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
 import ru.amk.core.moex_model.company.CreateMoexCandle
+import ru.amk.core.moex_model.company.START_PAGE
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.*
 
-class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCandleServiceNetwork) :
+class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCandleServiceNetworkImpl) :
     CompanyRepositoryCore {
 
     private val _date: String
@@ -32,7 +33,7 @@ class CompanyRepositoryCoreNetwork(private val moexCandleServiceNetwork: MoexCan
 
         val listCompany = mutableListOf<Company>()
         return moexCandleServiceNetwork
-            .getMoexCandleServiceAllCompanyByPage(date)
+            .getMoexCandleServiceAllCompany(START_PAGE, date)
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {

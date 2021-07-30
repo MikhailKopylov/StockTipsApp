@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
+import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
 import ru.amk.core.moex_model.company.MoexCandleService
 
 class DiContainerCore {
@@ -30,5 +30,5 @@ class DiContainerCore {
     private val moexCandleService: MoexCandleService by lazy { retrofit.create(
         MoexCandleService::class.java) }
 
-    val moexCandleServiceNetwork: MoexCandleServiceNetwork = MoexCandleServiceNetwork(moexCandleService)
+    val moexCandleServiceNetwork: MoexCandleServiceNetworkImpl = MoexCandleServiceNetworkImpl(moexCandleService)
 }
