@@ -3,7 +3,6 @@ package ru.amk.company_list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.amk.company_list.di.DaggerItemCompanyComponent
 import ru.amk.company_list.item.ItemCompanyPresenter
@@ -15,6 +14,7 @@ class CompanyListAdapter @Inject constructor(
     val companyListPresenter: CompanyListPresenter,
 ) :
     RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
+
     init {
         companyListPresenter.onViewCreated()
     }
@@ -23,7 +23,7 @@ class CompanyListAdapter @Inject constructor(
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         @Inject
-        lateinit var itemCompanyPresenter:ItemCompanyPresenter
+        lateinit var itemCompanyPresenter: ItemCompanyPresenter
 
         init {
             itemView.setOnClickListener(this)
@@ -33,15 +33,10 @@ class CompanyListAdapter @Inject constructor(
                 .itemView(itemView)
                 .build().inject(this)
         }
-
         override fun onClick(v: View) {
-            itemCompanyPresenter.onClickItem(adapterPosition)
-            Toast.makeText(v.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
+            itemCompanyPresenter.onClickItem(itemView.context, adapterPosition)
         }
-
-
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
 

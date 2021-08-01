@@ -1,6 +1,8 @@
 package ru.amk.core.di
 
+import ru.amk.core.mediator.ProvidesFacade
+
 interface AppWithFacade {
 
-    fun getAppProvider():AppProvider
+    fun getFacade(): ProvidesFacade
 }

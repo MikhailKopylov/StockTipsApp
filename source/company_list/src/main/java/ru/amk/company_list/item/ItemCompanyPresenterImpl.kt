@@ -1,5 +1,6 @@
 package ru.amk.company_list.item
 
+import android.content.Context
 import ru.amk.company_list.list.CompanyListPresenter
 import javax.inject.Inject
 
@@ -15,8 +16,9 @@ class ItemCompanyPresenterImpl @Inject constructor(
         view.setCompanySetId(company.secId)
     }
 
-    override fun onClickItem(position: Int) {
-        view.openCandleScreen(
+    override fun onClickItem(context: Context, position: Int) {
+        companyListPresenter.openCandleScreen(
+            context,
             companyListPresenter.getCompanyByPosition(position).secId,
             companyListPresenter.getCompanyByPosition(position).date
         )

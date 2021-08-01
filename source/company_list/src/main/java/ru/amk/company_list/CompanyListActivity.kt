@@ -11,6 +11,7 @@ import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
+import ru.amk.core.mediator.CandleChartMediator
 import javax.inject.Inject
 
 class CompanyListActivity : AppCompatActivity() {
@@ -21,6 +22,9 @@ class CompanyListActivity : AppCompatActivity() {
 
     @Inject
     lateinit var companyListPresenter: CompanyListPresenter
+
+    @Inject
+    lateinit var candleChartMediator: CandleChartMediator
 
     companion object {
         fun startCompanyListActivity(context: Context) {
@@ -36,13 +40,14 @@ class CompanyListActivity : AppCompatActivity() {
         val companyListRW: CompanyListViewImpl = findViewById(R.id.company_list_rw)
 
         DaggerCompanyListComponent.builder()
-            .appProvider((application as AppWithFacade).getAppProvider())
+            .providerFacade((application as AppWithFacade).getFacade())
             .coreComponent(DaggerCoreComponent.create())
             .companyListView(companyListRW)
             .build().inject(this)
 
         companyListRW.layoutManager = LinearLayoutManager(this)
         companyListRW.adapter = companyListAdapter
+
     }
 
     override fun onDestroy() {
