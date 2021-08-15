@@ -3,11 +3,12 @@ package ru.amk.company_list.list
 import android.annotation.SuppressLint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import ru.amk.company_list.repository.CompanyRepository
+import ru.amk.company_list.repository.CompanyListRepository
 import ru.amk.core.company.Company
+import javax.inject.Inject
 
-class CompanyListPresenterImpl(
-    private val companyRepository: CompanyRepository,
+class CompanyListPresenterImpl @Inject constructor(
+    private val companyListRepositoryCore: CompanyListRepository,
     private val companyListView: CompanyListView
 ) : CompanyListPresenter {
 
@@ -22,7 +23,7 @@ class CompanyListPresenterImpl(
     @SuppressLint("CheckResult")
     override fun onViewCreated() {
         compositeDisposable.add(
-            companyRepository.getAllCompany()
+            companyListRepositoryCore.getAllCompany()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     it?.let {

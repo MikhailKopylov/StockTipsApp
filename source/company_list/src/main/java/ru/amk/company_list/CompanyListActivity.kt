@@ -6,9 +6,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import ru.amk.company_list.di.DiContainerCompanyList
+import ru.amk.company_list.di.DaggerCompanyListComponent
+import ru.amk.company_list.list.CompanyListPresenter
+import ru.amk.company_list.list.CompanyListViewImpl
+import ru.amk.core.di.AppWithFacade
+import ru.amk.core.di.DaggerCoreComponent
+import javax.inject.Inject
 
 class CompanyListActivity : AppCompatActivity() {
+
+
+    @Inject
+    lateinit var companyListAdapter: CompanyListAdapter
+
+    @Inject
+    lateinit var companyListPresenter: CompanyListPresenter
 
     companion object {
         fun startCompanyListActivity(context: Context) {
@@ -16,24 +28,25 @@ class CompanyListActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var diContainer: DiContainerCompanyList
-
     @SuppressLint("CheckResult", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_list)
 
-        diContainer = DiContainerCompanyList(this)
+        val companyListRW: CompanyListViewImpl = findViewById(R.id.company_list_rw)
 
-        val companyListRW = diContainer.companyListRW
+        DaggerCompanyListComponent.builder()
+            .appProvider((application as AppWithFacade).getAppProvider())
+            .coreComponent(DaggerCoreComponent.create())
+            .companyListView(companyListRW)
+            .build().inject(this)
+
         companyListRW.layoutManager = LinearLayoutManager(this)
-
-        val adapter = diContainer.companyListAdapter
-        companyListRW.adapter = adapter
+        companyListRW.adapter = companyListAdapter
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        diContainer.companyListPresenter.onCleared()
+        companyListPresenter.onCleared()
     }
 }
