@@ -46,10 +46,10 @@ class CandleChartActivity : AppCompatActivity() {
         val secId = intent.getStringExtra(SEC_ID_COMPANY)
         val dateTill = intent.getStringExtra(DATE_TILL)
 
-        val candleChartView:CandleChartView = findViewById(R.id.candle_chart)
+        val candleChartView: CandleChartView = findViewById(R.id.candle_chart)
         DaggerCandleChartComponent.builder()
             .candleChartView(candleChartView)
-            .appProvider((application as AppWithFacade).getAppProvider())
+            .appProvider((application as AppWithFacade).getFacade())
             .coreComponent(DaggerCoreComponent.create())
             .build()
             .inject(this)

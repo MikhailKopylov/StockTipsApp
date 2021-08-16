@@ -5,11 +5,12 @@ import dagger.Component
 import ru.amk.company_list.CompanyListActivity
 import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.core.di.ActivityScope
-import ru.amk.core.di.AppProvider
+import ru.amk.core.mediator.AppProvider
 import ru.amk.core.di.CoreComponent
+import ru.amk.core.mediator.ProvidesFacade
 
 @Component(
-    dependencies = [CoreComponent::class, AppProvider::class],
+    dependencies = [CoreComponent::class, ProvidesFacade::class],
     modules = [CompanyListModule::class, ItemCompanyModule::class]
 )
 @ActivityScope
@@ -23,10 +24,12 @@ interface CompanyListComponent {
         fun build(): CompanyListComponent
 
         @BindsInstance
-        fun companyListView(view:CompanyListViewImpl): CompanyListComponentBuilder
+        fun companyListView(view: CompanyListViewImpl): CompanyListComponentBuilder
 
         fun coreComponent(coreComponent: CoreComponent): CompanyListComponentBuilder
 
-        fun appProvider(appProvider: AppProvider): CompanyListComponentBuilder
+        fun providerFacade(providerFacade: ProvidesFacade): CompanyListComponentBuilder
+
+
     }
 }

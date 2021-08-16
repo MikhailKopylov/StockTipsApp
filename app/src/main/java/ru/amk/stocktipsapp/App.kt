@@ -1,19 +1,19 @@
 package ru.amk.stocktipsapp
 
 import android.app.Application
-import ru.amk.core.di.AppProvider
 import ru.amk.core.di.AppWithFacade
+import ru.amk.core.mediator.ProvidesFacade
 
-class App:Application(), AppWithFacade {
+class App : Application(), AppWithFacade {
 
-    companion object{
-        lateinit var appProvider: AppProvider
+    companion object {
+        lateinit var facadeComponent: FacadeComponent
     }
 
     override fun onCreate() {
         super.onCreate()
-        appProvider = AppComponent.createAppComponent(this)
+        facadeComponent = FacadeComponent.create(applicationContext)
     }
 
-    override fun getAppProvider(): AppProvider  = appProvider
+    override fun getFacade(): ProvidesFacade = facadeComponent
 }

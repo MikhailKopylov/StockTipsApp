@@ -3,7 +3,7 @@ package ru.amk.stocktipsapp
 import android.content.Context
 import dagger.BindsInstance
 import dagger.Component
-import ru.amk.core.di.AppProvider
+import ru.amk.core.mediator.AppProvider
 import javax.inject.Singleton
 
 @Component

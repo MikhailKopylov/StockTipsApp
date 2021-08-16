@@ -25,10 +25,9 @@ interface ItemCompanyComponent {
         @BindsInstance
         fun itemView(itemView: View): CompanyItemComponentBuilder
 
-        fun coreComponent(coreComponent: CoreComponent): CompanyItemComponentBuilder
-
         @BindsInstance
         fun companyListPresenter(companyListPresenter: CompanyListPresenter): CompanyItemComponentBuilder
 
+        fun coreComponent(coreComponent: CoreComponent): CompanyItemComponentBuilder
     }
 }
