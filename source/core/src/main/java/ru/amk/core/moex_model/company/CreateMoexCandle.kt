@@ -42,11 +42,17 @@ class CreateMoexCandle(private val moexCandleRaw: MoexCandleRaw) {
         when (DEFAULT_DOUBLE) {
             rawData[11], rawData[8], rawData[7], rawData[6] -> return false
         }
+        when (null) {
+            rawData[11], rawData[8], rawData[7], rawData[6] -> return false
+        }
         return true
     }
 
     private fun isExistDateAndName(rawData: List<Any>): Boolean {
         when (DEFAULT_STRING) {
+            rawData[2], rawData[1], rawData[3] -> return false
+        }
+        when (null) {
             rawData[2], rawData[1], rawData[3] -> return false
         }
         return true

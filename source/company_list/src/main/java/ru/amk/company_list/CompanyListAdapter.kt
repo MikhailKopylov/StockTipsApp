@@ -11,19 +11,21 @@ import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
 
+
 class CompanyListAdapter @Inject constructor(
     val companyListPresenter: CompanyListPresenter,
 ) :
-    RecyclerView.Adapter<CompanyListAdapter.CompanyViewHolder>() {
+    RecyclerView.Adapter<BaseViewHolder>() {
     init {
         companyListPresenter.onViewCreated()
     }
 
+
     inner class CompanyViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        BaseViewHolder(itemView), View.OnClickListener {
 
         @Inject
-        lateinit var itemCompanyPresenter:ItemCompanyPresenter
+        lateinit var itemCompanyPresenter: ItemCompanyPresenter
 
         init {
             itemView.setOnClickListener(this)
@@ -39,22 +41,48 @@ class CompanyListAdapter @Inject constructor(
             Toast.makeText(v.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
         }
 
-
+        override fun onBind(position: Int) {
+            itemCompanyPresenter.onBind(position)
+        }
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CompanyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+        return when (viewType) {
+            R.layout.item_empty -> {
+                val itemView = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_empty, parent, false)
+                EmptyViewHolder(itemView)
+            }
+            else -> {
+                val itemView = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_company, parent, false)
+                CompanyViewHolder(itemView)
+            }
+        }
 
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_company, parent, false)
-        return CompanyViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holderCompany: CompanyViewHolder, position: Int) {
-        holderCompany.itemCompanyPresenter.onBind(position)
+    override fun getItemViewType(position: Int): Int {
+        return if (companyListPresenter.getCount() == 0) {
+            R.layout.item_empty
+        } else {
+            R.layout.item_company
+        }
     }
 
-    override fun getItemCount(): Int = companyListPresenter.getCount()
+    override fun onBindViewHolder(holderCompany: BaseViewHolder, position: Int) {
+        holderCompany.onBind(position)
+
+    }
+
+    override fun getItemCount(): Int {
+        return if (companyListPresenter.getCount() == 0) {
+            1
+        } else {
+            companyListPresenter.getCount()
+        }
+    }
 
 
 }

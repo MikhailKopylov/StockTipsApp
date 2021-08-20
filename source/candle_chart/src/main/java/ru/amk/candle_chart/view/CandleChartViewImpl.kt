@@ -2,85 +2,129 @@ package ru.amk.candle_chart.view
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.os.Build
 import android.util.AttributeSet
-import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import ru.amk.candle_chart.presenter.CandleChartPresenter
+import ru.amk.candle_chart.view.Paints.paintAxis
+import ru.amk.candle_chart.view.Paints.paintAxisDottedLine
+import ru.amk.candle_chart.view.Paints.paintText
 import ru.amk.core.candle.Candle
+import java.time.LocalDate
 
-class CandleChartViewImpl :CandleChartView, View{
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-    private var candleList: List<Candle> = listOf()
+const val COUNT_OF_VALUE_Y_AXIS = 5
+const val SEGMENT_LENGTH = 5f
 
-    private var heightPerValue: Int = 0
-    private var widthPerView: Int = 150
-    private var currentX: Int = 0
-    private val paint: Paint = Paint().apply {
-        color = Color.BLACK
-        strokeWidth = 10f
+class CandleChartViewImpl @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : CandleChartView, BaseView(context, attrs, defStyleAttr) {
+
+
+    private var _heightPerValue: Double = 0.0
+    private var _currentX: Int = 0
+    private var _widthSize = 0
+
+
+    private var _stepXAxis = 0f//Расстояние между подписями оси X
+
+    private lateinit var _candleChartPresenter: CandleChartPresenter
+    override fun setExpensePresenter(candleChartPresenter: CandleChartPresenter) {
+        _candleChartPresenter = candleChartPresenter
     }
 
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        _widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
         when (widthMode) {
             MeasureSpec.AT_MOST, MeasureSpec.EXACTLY, MeasureSpec.UNSPECIFIED -> {
-                setMeasuredDimension(widthPerView * candleList.size , heightSize * 10)
-//                super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+                _stepXAxis = _widthPerView.toFloat()
+                if (candleList.isNotEmpty()) {
+                    _heightPerValue = _coordZeroY / _maxValueYAxis
+                }
+                setMeasuredDimension(_widthPerView * candleList.size, _heightView)
             }
         }
+        _candleChartPresenter.scrollToLeft()
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onDraw(canvas: Canvas?) {
 
-    if(candleList.isNotEmpty()) {
-        widthPerView = /*width / candleList.size*/ 150
-        currentX = 0
-        heightPerValue = height / (candleList.max()).toInt()
+        if (candleList.isNotEmpty()) {
+            _currentX = 0
+            _heightPerValue = _coordZeroY / candleList.diff()
 
-        for (item in candleList) {
-//            val left = currentX.toFloat()
-//            val top = (height - heightPerValue * item).toFloat()
-//            val right = (currentX + widthPerView).toFloat()
-//            val bottom = height.toFloat()
-//            canvas?.drawRect(left, top, right, bottom, paint)
-            canvas?.let {
-                drawCoordinateAxis(canvas)
-                onDrawShadow(canvas, item)
-                onDrawBody(canvas, item)
+            canvas?.let { onDrawCoordinateGrid(canvas) }
+            for (item in candleList) {
+                canvas?.let {
+                    onDrawXAxisSignatures(canvas, item)
+                    onDrawShadow(canvas, item)
+                    onDrawBody(canvas, item)
+                }
+                _currentX += _widthPerView
             }
-
-            currentX += widthPerView
-
         }
     }
 
-    }
+
+    override fun getWidthView(): Int = _widthPerView * candleList.size
 
     private fun onDrawShadow(canvas: Canvas, candle: Candle) {
-        val positionX = (currentX + widthPerView / 2).toFloat()
-        val top = (height - heightPerValue * candle.maxPrice).toFloat()
-        val bottom = (height - heightPerValue * candle.minPrice).toFloat()
-        canvas.drawLine(positionX, top, positionX, bottom, paint)
+        val positionX = (_currentX + _widthPerView / 2).toFloat()
+
+
+        val top = _coordZeroY - (_heightPerValue * (candle.maxPrice - candleList.min())).toFloat()
+        val bottom =
+            _coordZeroY - (_heightPerValue * (candle.minPrice - candleList.min())).toFloat()
+        canvas.drawLine(positionX, top, positionX, bottom, candle.colorBody.paint)
+
+
     }
 
     private fun onDrawBody(canvas: Canvas, candle: Candle) {
-        val left = (currentX + widthPerView / 2 - widthPerView / 8).toFloat()
-        val top = (height - heightPerValue * candle.openPrice).toFloat()
-        val right = (currentX + widthPerView / 2 + widthPerView / 8).toFloat()
-        val bottom = (height - heightPerValue * candle.closePrice).toFloat()
-        canvas.drawRect(left, top, right, bottom, candle.colorBody.paint)
+        val left = (_currentX + _widthPerView / 2 - _widthPerView / 8).toFloat()
+        val top = _coordZeroY - (_heightPerValue * (candle.openPrice - candleList.min())).toFloat()
+        val right = (_currentX + _widthPerView / 2 + _widthPerView / 8).toFloat()
+        val bottom =
+            _coordZeroY - (_heightPerValue * (candle.closePrice - candleList.min())).toFloat()
+        if (candle.openPrice == candle.closePrice) {
+            canvas.drawLine(left, top, right, bottom, candle.colorBody.paint)
+        } else {
+            canvas.drawRect(left, top, right, bottom, candle.colorBody.paint)
+        }
     }
 
-    private fun drawCoordinateAxis(canvas: Canvas) {
-        canvas.drawLine(0f, height.toFloat(), width.toFloat(), height.toFloat(), paint)
-        canvas.drawLine(0f, height.toFloat(), 0f, 0f, paint)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onDrawXAxisSignatures(canvas: Canvas, item: Candle) {
+        val positionX = (_currentX + _widthPerView / 2).toFloat()
+        //Рисование сигнатуры на оси Х
+        val startY = _coordZeroY - SEGMENT_LENGTH
+        val stopY = _coordZeroY + SEGMENT_LENGTH
+        canvas.drawLine(positionX, startY, positionX, stopY, paintAxis)
+        canvas.drawLine(positionX, stopY, positionX, _coordEndYAxis, paintAxisDottedLine)
+        canvas.drawText(item.date.convertDate(), positionX - 20f, stopY + 15f, paintText)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun onDrawCoordinateGrid(canvas: Canvas) {
+        canvas.drawLine(_coordZeroX, _coordZeroY, _coordEndXAxis, _coordZeroY, paintAxis)//ось X
+
+        for (item in 1..COUNT_OF_VALUE_Y_AXIS) {
+            val startY = item * _stepYAxis
+            val stopX = _coordZeroX + SEGMENT_LENGTH
+            //горизонтальный пунктир
+            canvas.drawLine(stopX, startY, _coordEndXAxis, startY, paintAxisDottedLine)
+        }
     }
 
     override fun drawCandles(candles: List<Candle>) {
@@ -93,27 +137,16 @@ class CandleChartViewImpl :CandleChartView, View{
         Toast.makeText(this.context, "Error! No data!", Toast.LENGTH_SHORT).show()
     }
 
-//    override fun setHorizontalScrollBarEnabled(horizontalScrollBarEnabled: Boolean) {
-//        super.setHorizontalScrollBarEnabled(true)
-//    }
-
-//    override fun onInterceptTouchEvent( ev: MotionEvent):Boolean{
-//        return super.onInterceptTouchEvent(ev)
-//    }
-
-//    @SuppressLint("ClickableViewAccessibility")
-//    override fun onTouchEvent(ev: MotionEvent?): Boolean {
-//        return super.onTouchEvent(ev)
-//    }
 }
 
-private fun List<Candle>.max(): Double {
-    if (this.isEmpty()) return -1.0
-    var max = this[0].maxPrice
-    for (item in this) {
-        if (item.maxPrice > max) {
-            max = item.maxPrice
-        }
+@RequiresApi(Build.VERSION_CODES.O)
+private fun String.convertDate(): String {
+    val localDate = LocalDate.parse(this)
+    return if (localDate.monthValue < 10) {
+        "${localDate.dayOfMonth}.0${localDate.monthValue}"
+    } else {
+        "${localDate.dayOfMonth}.${localDate.monthValue}"
     }
-    return max
 }
+
+

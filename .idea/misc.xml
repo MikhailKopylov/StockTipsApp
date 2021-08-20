@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/candle_chart/src/main/res/layout/activity_candle_chart.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/activity_company_list.xml" value="0.178125" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/item_company.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/item_empty.xml" value="0.35520833333333335" />
       </map>
     </option>
   </component>

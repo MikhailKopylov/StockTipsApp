@@ -13,12 +13,7 @@ class CompanyListPresenterImpl @Inject constructor(
 ) : CompanyListPresenter {
 
     private val compositeDisposable = CompositeDisposable()
-    private var companyList = listOf(
-        Company("1", "1", "2021-12-12"),
-        Company("2", "2", "2021-12-12"),
-        Company("3", "3", "2021-12-12"),
-        Company("4", "4", "2021-12-12"),
-    )
+    private var companyList = listOf<Company>()
 
     @SuppressLint("CheckResult")
     override fun onViewCreated() {
@@ -30,7 +25,9 @@ class CompanyListPresenterImpl @Inject constructor(
                         companyList = it
                         companyListView.notifyAllDataChange(it)
                     }
-                }, {})
+                }, {
+                    //TODO add error handler
+                })
         )
     }
 

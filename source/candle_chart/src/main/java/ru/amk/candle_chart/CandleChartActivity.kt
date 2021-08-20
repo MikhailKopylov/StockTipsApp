@@ -6,10 +6,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.HorizontalScrollView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import ru.amk.candle_chart.di.DaggerCandleChartComponent
 import ru.amk.candle_chart.presenter.CandleChartPresenter
+import ru.amk.candle_chart.view.AxisYView
 import ru.amk.candle_chart.view.CandleChartView
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
@@ -46,9 +48,17 @@ class CandleChartActivity : AppCompatActivity() {
         val secId = intent.getStringExtra(SEC_ID_COMPANY)
         val dateTill = intent.getStringExtra(DATE_TILL)
 
-        val candleChartView:CandleChartView = findViewById(R.id.candle_chart)
+        val candleChartView: CandleChartView = findViewById(R.id.candle_chart)
+        val axisYView: AxisYView = findViewById(R.id.axisYView)
+        val scrollView: HorizontalScrollView = findViewById(R.id.candle_sv)
+
+        scrollView.post {
+            scrollView.scrollBy(450, 0)
+        }
         DaggerCandleChartComponent.builder()
             .candleChartView(candleChartView)
+            .axisYView(axisYView)
+            .scrollView(scrollView)
             .appProvider((application as AppWithFacade).getAppProvider())
             .coreComponent(DaggerCoreComponent.create())
             .build()

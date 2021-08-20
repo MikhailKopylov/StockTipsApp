@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:context=".CandleChartActivity">
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@android:color/darker_gray"
-        >
+    <ru.amk.candle_chart.view.AxisYViewImpl
+        android:id="@+id/axisYView"
+        android:layout_width="10dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        />
+    <HorizontalScrollView
+        android:id="@+id/candle_sv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        tools:ignore="UselessParent">
 
         <ru.amk.candle_chart.view.CandleChartViewImpl
             android:id="@+id/candle_chart"
-            android:layout_width="800dp"
-            android:layout_height="match_parent"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
 
 
-    </LinearLayout>
+    </HorizontalScrollView>
 
 
-</HorizontalScrollView>
+</LinearLayout>

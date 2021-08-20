@@ -1,5 +1,7 @@
 package ru.amk.core.candle
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import io.reactivex.Single
 import ru.amk.core.moex_model.company.CreateMoexCandle
 import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
@@ -9,7 +11,12 @@ import javax.inject.Inject
 class CandleRepositoryCoreNetwork @Inject constructor(private val moexCandleServiceNetwork: MoexCandleServiceNetwork) :
     CandleRepositoryCore {
 
-    override fun getCandleList(secId:String, dataFrom:String, dataTill:String): Single<List<Candle>> {
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun getCandleList(
+        secId: String,
+        dataFrom: String,
+        dataTill: String
+    ): Single<List<Candle>> {
         val listCompany = mutableListOf<Candle>()
         return moexCandleServiceNetwork
             .getMoexCandleServiceByCompany(secId, dataFrom, dataTill)
@@ -17,16 +24,20 @@ class CandleRepositoryCoreNetwork @Inject constructor(private val moexCandleServ
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {
                     val colorCandle = setColorCandle(item)
-                    listCompany.add(Candle(item.HIGH, item.LOW, item.OPEN, item.CLOSE, item.TRADEDATE, colorCandle))
+                    listCompany.add(
+                        with(item) {
+                            Candle(HIGH, LOW, OPEN, CLOSE, TRADEDATE, colorCandle)
+                        }
+                    )
                 }
                 Single.just(listCompany)
             }
     }
 
     private fun setColorCandle(item: MoexData) =
-        if (item.OPEN > item.CLOSE) {
-            ColorCandle.WHITE
+        if (item.OPEN < item.CLOSE) {
+            ColorCandle.UP
         } else {
-            ColorCandle.BLACK
+            ColorCandle.DOWN
         }
 }
