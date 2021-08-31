@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.ChipGroup
 import ru.amk.company_list.di.DaggerCompanyListComponent
 import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.company_list.list.CompanyListViewImpl
+import ru.amk.company_list.list.SortedBy
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
@@ -43,6 +47,31 @@ class CompanyListActivity : AppCompatActivity() {
 
         companyListRW.layoutManager = LinearLayoutManager(this)
         companyListRW.adapter = companyListAdapter
+
+        sorted()
+    }
+
+    @SuppressLint("InflateParams")
+    private fun sorted() {
+        findViewById<Button>(R.id.sort_button).setOnClickListener {
+            val dialog = BottomSheetDialog(this)
+            val bottomSheet = layoutInflater.inflate(R.layout.sorting_bottom_sheet, null)
+            bottomSheet.findViewById<ChipGroup>(R.id.selection_sorted_chip_group)
+                .setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        R.id.sort_by_name_chip -> {
+                            companyListPresenter.sortBy(SortedBy.NAME)
+                            dialog.dismiss()
+                        }
+                        R.id.sort_by_secid_chip -> {
+                            companyListPresenter.sortBy(SortedBy.SEC_ID)
+                            dialog.dismiss()
+                        }
+                    }
+                }
+            dialog.setContentView(bottomSheet)
+            dialog.show()
+        }
     }
 
     override fun onDestroy() {

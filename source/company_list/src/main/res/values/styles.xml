@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyCardViewStyle" parent="Theme.MaterialComponents.Light">
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">4dp</item>
+
+        <item name="contentPaddingBottom">24dp</item>
+        <item name="contentPaddingTop">24dp</item>
+        <item name="contentPaddingLeft">16dp</item>
+        <item name="contentPaddingRight">16dp</item>
+        <item name="cardBackgroundColor">@color/white</item>
+<!--        <item name="cardMaxElevation">12dp</item>-->
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="PrimaryFlatButton" parent="Theme.AppCompat.Light">
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>
+        <item name="colorControlHighlight">@color/gray600</item>
+        <item name="colorAccent">@color/dark</item>
+    </style>
+
+</resources>
+
+
+<!--    app:cardElevation="10dp"-->
+<!--    app:cardCornerRadius="20dp"-->
+<!--    android:layout_margin="10dp"-->
+<!--    app:cardBackgroundColor="@color/white"-->

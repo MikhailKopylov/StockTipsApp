@@ -7,5 +7,6 @@ interface CompanyListPresenter {
     fun onViewCreated()
     fun getCompanyByPosition(position:Int): Company
     fun getCount():Int
+    fun sortBy(sortedBy:SortedBy)
     fun onCleared()
 }
