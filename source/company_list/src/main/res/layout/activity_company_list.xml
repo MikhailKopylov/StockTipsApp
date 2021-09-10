@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:checkable="true"
         android:text="@string/favorite_to_up"
-        style="@style/Widget.MaterialComponents.Chip.Choice"
+        style="@style/Widget.MaterialComponents.Chip.Filter"
         app:layout_constraintBottom_toBottomOf="@+id/sort_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sort_button"

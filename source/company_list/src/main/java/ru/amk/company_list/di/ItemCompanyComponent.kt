@@ -3,7 +3,7 @@ package ru.amk.company_list.di
 import android.view.View
 import dagger.BindsInstance
 import dagger.Component
-import ru.amk.company_list.CompanyListAdapter
+import ru.amk.company_list.list.CompanyListAdapter
 import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.core.di.ActivityScope
 import ru.amk.core.di.CoreComponent

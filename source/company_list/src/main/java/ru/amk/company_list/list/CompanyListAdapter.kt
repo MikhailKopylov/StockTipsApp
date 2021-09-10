@@ -1,18 +1,15 @@
-package ru.amk.company_list
+package ru.amk.company_list.list
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
+import ru.amk.company_list.R
 import ru.amk.company_list.di.DaggerItemCompanyComponent
 import ru.amk.company_list.item.ItemCompanyPresenter
-import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.core.di.AppProvider
-import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
 

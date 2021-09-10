@@ -11,27 +11,4 @@ abstract class StockDatabase : RoomDatabase() {
 
     abstract fun favoriteCompanyDAO(): FavoriteCompanyDAO
 
-//    companion object {
-//
-//        @Volatile
-//        private var INSTANCE: StockDatabase? = null
-//
-//        fun getInstance(context: Context): StockDatabase {
-//            synchronized(this) {
-//                var instance = INSTANCE
-//
-//                if (instance == null) {
-//                    instance = Room
-//                        .databaseBuilder(
-//                            context.applicationContext,
-//                            StockDatabase::class.java,
-//                            "stock_database"
-//                        )
-//                        .build()
-//                    INSTANCE = instance
-//                }
-//                return instance
-//            }
-//        }
-//    }
 }

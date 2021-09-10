@@ -8,9 +8,8 @@ interface CompanyListPresenter {
     fun onViewCreated()
     fun getCompanyByPosition(position:Int): FavoriteCompany
     fun getCount():Int
-    fun sortBy(sortedBy:SortedBy)
+    fun sortBy(sortedBy:SortedBy, favoriteUp:Boolean)
     fun addFavoriteCompany(company: Company)
     fun deleteCompanyFromFavorite(company: Company)
-    fun setFavoriteCompanyUp(isToUp:Boolean)
     fun onCleared()
 }

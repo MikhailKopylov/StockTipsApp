@@ -1,4 +1,4 @@
-package ru.amk.company_list
+package ru.amk.company_list.list
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
