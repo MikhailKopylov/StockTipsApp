@@ -1,5 +1,6 @@
 package ru.amk.company_list.item
 
+import ru.amk.company_list.FavoriteCompany
 import ru.amk.company_list.list.CompanyListPresenter
 import javax.inject.Inject
 
@@ -11,15 +12,27 @@ class ItemCompanyPresenterImpl @Inject constructor(
 
     override fun onBind(position: Int) {
         val company = companyListPresenter.getCompanyByPosition(position)
-        view.setCompanyName(company.shortName)
-        view.setCompanySetId(company.secId)
+        view.setCompanyName(company.company.shortName)
+        view.setCompanySetId(company.company.secId)
+        view.setFavorite(company.isFavorite)
     }
 
-    override fun onClickItem(position: Int) {
+    override fun onClickItem(adapterPosition: Int) {
         view.openCandleScreen(
-            companyListPresenter.getCompanyByPosition(position).secId,
-            companyListPresenter.getCompanyByPosition(position).date
+            companyListPresenter.getCompanyByPosition(adapterPosition).company.secId,
+            companyListPresenter.getCompanyByPosition(adapterPosition).company.date
         )
+    }
+
+    override fun onClickFavorite(adapterPosition: Int) {
+        val favoriteCompany: FavoriteCompany =
+            companyListPresenter.getCompanyByPosition(adapterPosition)
+
+        if (favoriteCompany.isFavorite) {
+            companyListPresenter.deleteCompanyFromFavorite(favoriteCompany.company)
+        } else {
+            companyListPresenter.addFavoriteCompany(favoriteCompany.company)
+        }
     }
 
 

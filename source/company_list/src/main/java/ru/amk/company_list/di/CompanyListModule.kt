@@ -9,6 +9,8 @@ import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.company_list.repository.CompanyListRepository
 import ru.amk.company_list.repository.CompanyListRepositoryImpl
 import ru.amk.core.di.ActivityScope
+import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCore
+import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCoreImpl
 
 @Module
 abstract class CompanyListModule {
@@ -18,9 +20,10 @@ abstract class CompanyListModule {
         @ActivityScope
         fun provideCompanyListPresenter(
             view: CompanyListViewImpl,
-            companyListRepository: CompanyListRepositoryImpl
+            companyListRepository: CompanyListRepositoryImpl,
+            favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCoreImpl
         ): CompanyListPresenter =
-            CompanyListPresenterImpl(companyListRepository, view)
+            CompanyListPresenterImpl(companyListRepository, view, favoriteCompanyRepositoryCore)
     }
 
 

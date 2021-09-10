@@ -1,6 +1,7 @@
 <resources>
     <string name="load_data">Загрузка данных…</string>
-    <string name="Sorted">Сортировка</string>
+    <string name="Sorted">Сортировать</string>
     <string name="by_name">по имени</string>
     <string name="by_secid">по идентификатору</string>
+    <string name="favorite_to_up">Избранное вверх</string>
 </resources>

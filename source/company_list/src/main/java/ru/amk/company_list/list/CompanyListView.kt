@@ -4,11 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.RecyclerView
+import ru.amk.company_list.FavoriteCompany
 import ru.amk.core.company.Company
 
 interface CompanyListView {
 
-    fun notifyAllDataChange(newListCompany: List<Company>)
+    fun notifyAllDataChange(newListCompany: List<FavoriteCompany>)
 }
 
 
@@ -20,7 +21,7 @@ class CompanyListViewImpl @JvmOverloads constructor(
 
 
     @SuppressLint("NotifyDataSetChanged")
-    override fun notifyAllDataChange(newListCompany: List<Company>) {
+    override fun notifyAllDataChange(newListCompany: List<FavoriteCompany>) {
         adapter?.notifyDataSetChanged()
     }
 

@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:singleSelection="true"
-        app:checkedChip="@id/sort_by_name_chip"
         android:verticalScrollbarPosition="defaultPosition">
 
         <com.google.android.material.chip.Chip

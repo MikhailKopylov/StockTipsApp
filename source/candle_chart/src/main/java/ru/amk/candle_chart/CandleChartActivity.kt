@@ -60,7 +60,7 @@ class CandleChartActivity : AppCompatActivity() {
             .axisYView(axisYView)
             .scrollView(scrollView)
             .appProvider((application as AppWithFacade).getAppProvider())
-            .coreComponent(DaggerCoreComponent.create())
+            .coreComponent(DaggerCoreComponent.builder().appProvider((application as AppWithFacade).getAppProvider()).build())
             .build()
             .inject(this)
 

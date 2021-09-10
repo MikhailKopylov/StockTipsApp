@@ -22,12 +22,27 @@
 
     <Button
         android:id="@+id/sort_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/Sorted"
-        android:gravity="start|center_vertical"
         style="@style/PrimaryFlatButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start|center_vertical"
+        android:text="@string/Sorted"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.6" />
+
+    <com.google.android.material.chip.Chip
+
+        android:id="@+id/favorite_to_up_chip"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:text="@string/favorite_to_up"
+        style="@style/Widget.MaterialComponents.Chip.Choice"
+        app:layout_constraintBottom_toBottomOf="@+id/sort_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/sort_button"
+        app:layout_constraintWidth_percent="0.4" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

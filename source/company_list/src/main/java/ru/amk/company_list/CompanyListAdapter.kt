@@ -1,19 +1,25 @@
 package ru.amk.company_list
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.core.os.persistableBundleOf
 import androidx.recyclerview.widget.RecyclerView
 import ru.amk.company_list.di.DaggerItemCompanyComponent
 import ru.amk.company_list.item.ItemCompanyPresenter
 import ru.amk.company_list.list.CompanyListPresenter
+import ru.amk.core.di.AppProvider
+import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
 
 
 class CompanyListAdapter @Inject constructor(
     val companyListPresenter: CompanyListPresenter,
+    val appProvider: AppProvider
 ) :
     RecyclerView.Adapter<BaseViewHolder>() {
     init {
@@ -27,13 +33,19 @@ class CompanyListAdapter @Inject constructor(
         @Inject
         lateinit var itemCompanyPresenter: ItemCompanyPresenter
 
+        private var favoriteButton:ImageButton = itemView.findViewById(R.id.favorite_button)
+
         init {
             itemView.setOnClickListener(this)
             DaggerItemCompanyComponent.builder()
                 .companyListPresenter(companyListPresenter)
-                .coreComponent(DaggerCoreComponent.create())
+                .coreComponent(DaggerCoreComponent.builder().appProvider(appProvider).build())
                 .itemView(itemView)
                 .build().inject(this)
+
+            favoriteButton.setOnClickListener{
+                itemCompanyPresenter.onClickFavorite(adapterPosition)
+            }
         }
 
         override fun onClick(v: View) {

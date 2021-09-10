@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import ru.amk.company_list.di.DaggerCompanyListComponent
 import ru.amk.company_list.list.CompanyListPresenter
@@ -41,7 +42,10 @@ class CompanyListActivity : AppCompatActivity() {
 
         DaggerCompanyListComponent.builder()
             .appProvider((application as AppWithFacade).getAppProvider())
-            .coreComponent(DaggerCoreComponent.create())
+            .coreComponent(
+                DaggerCoreComponent.builder()
+                    .appProvider((application as AppWithFacade).getAppProvider()).build()
+            )
             .companyListView(companyListRW)
             .build().inject(this)
 
@@ -49,7 +53,10 @@ class CompanyListActivity : AppCompatActivity() {
         companyListRW.adapter = companyListAdapter
 
         sorted()
+
+        checkFavoriteToUp()
     }
+
 
     @SuppressLint("InflateParams")
     private fun sorted() {
@@ -71,6 +78,16 @@ class CompanyListActivity : AppCompatActivity() {
                 }
             dialog.setContentView(bottomSheet)
             dialog.show()
+        }
+    }
+
+    private fun checkFavoriteToUp() {
+        findViewById<Chip>(R.id.favorite_to_up_chip).setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                companyListPresenter.setFavoriteCompanyUp(true)
+            } else {
+                companyListPresenter.setFavoriteCompanyUp(false)
+            }
         }
     }
 

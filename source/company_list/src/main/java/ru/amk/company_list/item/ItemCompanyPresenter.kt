@@ -4,6 +4,7 @@ interface ItemCompanyPresenter {
 
     fun onBind(position: Int)
     fun onClickItem(adapterPosition: Int)
+    fun onClickFavorite(adapterPosition: Int)
 
 
 }
