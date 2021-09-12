@@ -7,14 +7,9 @@ import io.reactivex.disposables.CompositeDisposable
 import ru.amk.company_list.repository.CompanyListRepository
 import ru.amk.core.company.Company
 import io.reactivex.schedulers.Schedulers
-import ru.amk.company_list.FavoriteCompany
-import ru.amk.company_list.Settings
+import ru.amk.company_list.*
 import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCore
 import javax.inject.Inject
-
-enum class SortedBy {
-    NAME, SEC_ID
-}
 
 
 class CompanyListPresenterImpl @Inject constructor(
@@ -48,7 +43,7 @@ class CompanyListPresenterImpl @Inject constructor(
                     })
                 .subscribe({
                     companyList = it
-                    sortBy(Settings.sortedBy, Settings.favoriteUp)
+                    sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
                     companyListView.notifyAllDataChange(it)
                 }, {
                     //TODO add error handler
@@ -60,42 +55,16 @@ class CompanyListPresenterImpl @Inject constructor(
 
     override fun getCount(): Int = companyList.size
 
-    override fun sortBy(sortedBy: SortedBy, favoriteUp: Boolean) {
+    override fun sortBy(sortedBy: SortedBy, orderBy: OrderBy, favoriteUp: Boolean) {
 
         Settings.favoriteUp = favoriteUp
         Settings.sortedBy = sortedBy
-        val sortedCompanyList: List<FavoriteCompany>
-        if (favoriteUp) {
-            sortedCompanyList = when (sortedBy) {
-                SortedBy.NAME -> {
-                    val favoriteList =
-                        companyList.filter { it.isFavorite }.sortedBy { it.company.shortName }
-                            .toMutableList()
-                    val withOutFavoriteList =
-                        companyList.filter { !it.isFavorite }.sortedBy { it.company.shortName }
-                    favoriteList.addAll(withOutFavoriteList)
-                    favoriteList.toList()
-                }
+        val sortedCompanyList: List<FavoriteCompany> = SortHandler(companyList)
+            .sort(sortedBy, orderBy, favoriteUp)
 
-                SortedBy.SEC_ID -> {
-                    val favoriteList =
-                        companyList.filter { it.isFavorite }.sortedBy { it.company.secId }
-                            .toMutableList()
-                    val withOutFavoriteList =
-                        companyList.filter { !it.isFavorite }.sortedBy { it.company.secId }
-                    favoriteList.addAll(withOutFavoriteList)
-                    favoriteList.toList()
-                }
-            }
-        } else {
-            sortedCompanyList = when (sortedBy) {
-                SortedBy.NAME -> companyList.sortedBy { it.company.shortName }
-                SortedBy.SEC_ID -> companyList.sortedBy { it.company.secId }
-            }
-        }
-
+        val oldCompanyList = companyList
         companyList = sortedCompanyList
-        companyListView.notifyAllDataChange(companyList)
+        companyListView.notifyDiffDataChange(oldCompanyList, companyList)
     }
 
 

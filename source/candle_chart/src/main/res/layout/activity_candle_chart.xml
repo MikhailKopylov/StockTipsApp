@@ -6,17 +6,11 @@
     android:orientation="horizontal"
     tools:context=".CandleChartActivity">
 
-
-    <ru.amk.candle_chart.view.AxisYViewImpl
-        android:id="@+id/axisYView"
-        android:layout_width="10dp"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        />
     <HorizontalScrollView
         android:id="@+id/candle_sv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="90"
         android:background="@android:color/white"
         tools:ignore="UselessParent">
 
@@ -27,6 +21,14 @@
 
 
     </HorizontalScrollView>
+
+    <ru.amk.candle_chart.view.AxisYViewImpl
+        android:id="@+id/axisYView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@android:color/white"
+        />
 
 
 </LinearLayout>

@@ -2,11 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.StockTipsApp" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">#f5f5f5</item>
         <item name="colorPrimaryVariant">@color/asbestos</item>
         <item name="colorOnPrimary">@color/wetasphalt</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/gray</item>
+        <item name="colorSurface">@color/gray</item>
         <item name="colorSecondaryVariant">@color/lightGray</item>
         <item name="colorOnSecondary">@color/dark</item>
         <!-- Status bar color. -->

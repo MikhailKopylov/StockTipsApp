@@ -112,7 +112,7 @@ class CandleChartViewImpl @JvmOverloads constructor(
         val stopY = _coordZeroY + SEGMENT_LENGTH
         canvas.drawLine(positionX, startY, positionX, stopY, paintAxis)
         canvas.drawLine(positionX, stopY, positionX, _coordEndYAxis, paintAxisDottedLine)
-        canvas.drawText(item.date.convertDate(), positionX - 20f, stopY + 15f, paintText)
+        canvas.drawText(item.date.convertDate(), positionX - 30f, stopY +30f, paintText)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -121,7 +121,7 @@ class CandleChartViewImpl @JvmOverloads constructor(
 
         for (item in 1..COUNT_OF_VALUE_Y_AXIS) {
             val startY = item * _stepYAxis
-            val stopX = _coordZeroX + SEGMENT_LENGTH
+            val stopX = _coordZeroX
             //горизонтальный пунктир
             canvas.drawLine(stopX, startY, _coordEndXAxis, startY, paintAxisDottedLine)
         }

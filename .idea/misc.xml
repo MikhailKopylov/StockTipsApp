@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/AndroidProjects/StockTipsApp/source/candle_chart/src/main/res/layout/activity_candle_chart.xml" value="0.25" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/drawable-anydpi/arrow_down.xml" value="0.2682291666666667" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/drawable-anydpi/arrow_up.xml" value="0.43846153846153846" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/drawable-anydpi/favorite.xml" value="0.2635416666666667" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/drawable-anydpi/non_favorite.xml" value="0.2635416666666667" />
-        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/activity_company_list.xml" value="0.33" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/drawable/arrow_down.xml" value="0.2682291666666667" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/activity_company_list.xml" value="0.3938161106590724" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/item_company.xml" value="0.5" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/item_empty.xml" value="0.35520833333333335" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/company_list/src/main/res/layout/sorting_bottom_sheet.xml" value="0.35688405797101447" />

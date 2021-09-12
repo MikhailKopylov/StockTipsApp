@@ -6,11 +6,14 @@ import android.view.View
 import ru.amk.core.candle.Candle
 import java.util.*
 
+const val OFFSET_AXIS_Y = 50f
 abstract class BaseView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+
+
 
     var candleList: List<Candle> = listOf()
 
@@ -32,7 +35,7 @@ abstract class BaseView @JvmOverloads constructor(
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
         _heightView = heightSize / 2
-        _coordZeroY = _heightView - 25f
+        _coordZeroY = _heightView - OFFSET_AXIS_Y
         _maxValueYAxis = candleList.diff()
         _stepValueYAxis = _maxValueYAxis / COUNT_OF_VALUE_Y_AXIS
         _coordEndXAxis = _widthPerView * candleList.size - _coordZeroX

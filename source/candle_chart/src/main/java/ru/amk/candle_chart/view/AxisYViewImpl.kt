@@ -18,7 +18,7 @@ class AxisYViewImpl @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : AxisYView, BaseView(context, attrs, defStyleAttr) {
 
-    private var _defaultWidth = context.resources.displayMetrics.density * 25
+    private var _defaultWidth = context.resources.displayMetrics.density * 50
     private var _signatureCoordX = 1f
     private var _signatureCoordY = 1f
 
@@ -30,7 +30,7 @@ class AxisYViewImpl @JvmOverloads constructor(
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
 
-        _coordZeroX = _defaultWidth - 2
+        _coordZeroX =  2f
         setMeasuredDimension(_defaultWidth.toInt(), _heightView)
     }
 
@@ -48,10 +48,9 @@ class AxisYViewImpl @JvmOverloads constructor(
                 val startX = _coordZeroX - SEGMENT_LENGTH
                 val stopX = _coordZeroX + SEGMENT_LENGTH
                 canvas.drawLine(startX, startY, stopX, startY, Paints.paintAxis)
-                canvas.drawLine(stopX, startY, _coordEndXAxis, startY, Paints.paintAxisDottedLine)
                 canvas.drawText(
                     "${(_maxValueYAxis - (_stepValueYAxis * item) + candleList.min()).roundForAxisSignature()}",
-                    _signatureCoordX,
+                    _signatureCoordX + 15f,
                     startY,
                     Paints.paintText
                 )

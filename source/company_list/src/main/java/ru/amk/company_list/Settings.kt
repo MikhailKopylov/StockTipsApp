@@ -1,6 +1,5 @@
 package ru.amk.company_list
 
-import ru.amk.company_list.list.SortedBy
 
 object Settings {
 
@@ -8,8 +7,14 @@ object Settings {
     const val SORT_BY_KEY = "SortBy"
 
     private val DEFAULT_SORTED = SortedBy.NAME
+    private val DEFAULT_ORDER = OrderBy.RIGHT
+    private val DEFAULT_STATE_SORT = SortHandler.StateSort.NAME_RIGHT_FAV_TRUE
     private const val DEFAULT_FAVORITE_UP = false
 
     var favoriteUp = DEFAULT_FAVORITE_UP
     var sortedBy = DEFAULT_SORTED
+    var orderBy = DEFAULT_ORDER
+
+    var stateSorting = DEFAULT_STATE_SORT
+
 }

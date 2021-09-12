@@ -20,6 +20,6 @@ object Paints {
     val paintText = Paint().apply {
         color = Color.BLACK
         style = Paint.Style.FILL
-        textSize = 22f
+        textSize = 32f
     }
 }
