@@ -14,4 +14,5 @@ interface CompanyListPresenter {
     fun addFavoriteCompany(company: Company)
     fun deleteCompanyFromFavorite(company: Company)
     fun onCleared()
+    fun filterCompany(filterName: String)
 }

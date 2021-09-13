@@ -24,7 +24,7 @@ abstract class BaseView @JvmOverloads constructor(
     protected var _maxValueYAxis = 0.0//максимально значение по оси Y
     protected var _stepValueYAxis = _maxValueYAxis / COUNT_OF_VALUE_Y_AXIS//шаг значение по оси
     protected var _heightView = 0
-    protected val _widthPerView: Int = 100
+    protected val _widthPerView: Int = 50
     protected var _coordZeroY = 1f// начало оси Y
     protected var _coordEndYAxis = 0f//Конец оси Y
 

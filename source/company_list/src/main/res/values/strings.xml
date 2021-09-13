@@ -4,4 +4,5 @@
     <string name="by_name">ИМЯ</string>
     <string name="by_secid">ТИКЕР</string>
     <string name="favorite_to_up">Сначала избранное</string>
+    <string name="search_hint">Поиск компании</string>
 </resources>

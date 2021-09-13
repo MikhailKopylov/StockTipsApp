@@ -20,6 +20,8 @@ class CompanyListPresenterImpl @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
     private var companyList = listOf<FavoriteCompany>()
+    private var notFilterCompanyList = companyList
+    private var filterCompanyName = ""
 
     @SuppressLint("CheckResult")
     override fun onViewCreated() {
@@ -43,8 +45,10 @@ class CompanyListPresenterImpl @Inject constructor(
                     })
                 .subscribe({
                     companyList = it
+                    notFilterCompanyList = it
+                    filterCompany(filterCompanyName)
                     sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
-                    companyListView.notifyAllDataChange(it)
+                    companyListView.notifyAllDataChange(companyList)
                 }, {
                     //TODO add error handler
                 })
@@ -79,6 +83,26 @@ class CompanyListPresenterImpl @Inject constructor(
 
     override fun onCleared() {
         compositeDisposable.clear()
+    }
+
+    override fun filterCompany(filterName: String) {
+        filterCompanyName = filterName
+        companyList = if (filterCompanyName.isEmpty()) {
+            notFilterCompanyList
+        } else {
+            val filterCompanyList = notFilterCompanyList.filter {
+                it.company.secId.contains(filterName, true) ||
+                        it.company.shortName.contains(filterName, true)
+            }
+                .toList()
+            filterCompanyList
+        }
+        with(Settings) {
+            val sortedCompanyList: List<FavoriteCompany> = SortHandler(companyList)
+                .sort(sortedBy, orderBy, favoriteUp)
+            companyList = sortedCompanyList
+        }
+        companyListView.notifyAllDataChange(companyList)
     }
 
 }

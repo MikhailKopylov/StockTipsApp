@@ -94,4 +94,5 @@ class CompanyListAdapter @Inject constructor(
     }
 
 
+
 }

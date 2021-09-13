@@ -21,6 +21,19 @@
         <item name="colorControlHighlight">@color/gray600</item>
         <item name="colorAccent">@color/dark</item>
     </style>
+<!--    <style name="AppSearchViewStyle" parent="Widget.AppCompat.SearchView">-->
+<!--        <item name="queryBackground">@android:color/transparent</item>-->
+<!--        <item name="searchIcon">@drawable/favorite</item>-->
+<!--        <item name="android:imeActionId">6</item>-->
+<!--    </style>-->
+
+    <style name="toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="theme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="android:background">#f5f5f5</item>
+
+    </style>
 
 </resources>
 

@@ -65,9 +65,9 @@ class CandleChartViewImpl @JvmOverloads constructor(
             _heightPerValue = _coordZeroY / candleList.diff()
 
             canvas?.let { onDrawCoordinateGrid(canvas) }
-            for (item in candleList) {
+            for ((index, item) in candleList.withIndex()) {
                 canvas?.let {
-                    onDrawXAxisSignatures(canvas, item)
+                    onDrawXAxisSignatures(canvas, item, index)
                     onDrawShadow(canvas, item)
                     onDrawBody(canvas, item)
                 }
@@ -92,9 +92,9 @@ class CandleChartViewImpl @JvmOverloads constructor(
     }
 
     private fun onDrawBody(canvas: Canvas, candle: Candle) {
-        val left = (_currentX + _widthPerView / 2 - _widthPerView / 8).toFloat()
+        val left = (_currentX + _widthPerView / 2 - _widthPerView / 4).toFloat()
         val top = _coordZeroY - (_heightPerValue * (candle.openPrice - candleList.min())).toFloat()
-        val right = (_currentX + _widthPerView / 2 + _widthPerView / 8).toFloat()
+        val right = (_currentX + _widthPerView / 2 + _widthPerView / 4).toFloat()
         val bottom =
             _coordZeroY - (_heightPerValue * (candle.closePrice - candleList.min())).toFloat()
         if (candle.openPrice == candle.closePrice) {
@@ -105,14 +105,16 @@ class CandleChartViewImpl @JvmOverloads constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun onDrawXAxisSignatures(canvas: Canvas, item: Candle) {
+    private fun onDrawXAxisSignatures(canvas: Canvas, item: Candle, index: Int) {
         val positionX = (_currentX + _widthPerView / 2).toFloat()
         //Рисование сигнатуры на оси Х
         val startY = _coordZeroY - SEGMENT_LENGTH
         val stopY = _coordZeroY + SEGMENT_LENGTH
         canvas.drawLine(positionX, startY, positionX, stopY, paintAxis)
         canvas.drawLine(positionX, stopY, positionX, _coordEndYAxis, paintAxisDottedLine)
-        canvas.drawText(item.date.convertDate(), positionX - 30f, stopY +30f, paintText)
+        if (index % 2 == 0) {
+            canvas.drawText(item.date.convertDate(), positionX - 40f, stopY + 30f, paintText)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
