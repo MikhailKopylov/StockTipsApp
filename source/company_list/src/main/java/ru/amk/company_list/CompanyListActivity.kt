@@ -56,7 +56,7 @@ class CompanyListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_list)
         setSupportActionBar(toolbar)
-        title = "Компании"
+        title = "Курс акций"
 
         daggerBuilder(companyListRW)
         companyListRW.layoutManager = LinearLayoutManager(this)
@@ -228,7 +228,7 @@ class CompanyListActivity : AppCompatActivity() {
 
             val search: MenuItem = it.findItem(R.id.action_search)
             val searchView = search.actionView as SearchView
-            searchView.queryHint = "Test"
+            searchView.queryHint = "Название или тикер"
             searchView.setOnQueryTextListener(object :
                 SearchView.OnQueryTextListener {
 
