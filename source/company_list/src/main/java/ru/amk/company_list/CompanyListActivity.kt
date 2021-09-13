@@ -56,7 +56,7 @@ class CompanyListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_list)
         setSupportActionBar(toolbar)
-        title = "Курс акций"
+        title = "График акций"
 
         daggerBuilder(companyListRW)
         companyListRW.layoutManager = LinearLayoutManager(this)
