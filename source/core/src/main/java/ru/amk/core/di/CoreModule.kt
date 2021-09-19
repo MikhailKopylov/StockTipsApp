@@ -11,6 +11,8 @@ import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCoreImpl
 import ru.amk.core.moex_model.company.MoexCandleService
 import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
 import ru.amk.core.moex_model.company.MoexCandleServiceNetworkImpl
+import ru.amk.core.three_line_break.ThreeLineRepository
+import ru.amk.core.three_line_break.ThreeLineRepositoryNetwork
 import javax.inject.Singleton
 
 @Module
@@ -23,6 +25,10 @@ abstract class CoreModule {
     @Binds
     @Singleton
     abstract fun bindCandleRepositoryCore(candleRepositoryCore: CandleRepositoryCoreNetwork):CandleRepositoryCore
+
+    @Binds
+    @Singleton
+    abstract fun bindThreeLineBreakRepository(threeLineRepositoryNetwork: ThreeLineRepositoryNetwork): ThreeLineRepository
 
     @Binds
     @Singleton

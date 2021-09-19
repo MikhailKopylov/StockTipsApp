@@ -12,9 +12,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/source" />
-            <option value="$PROJECT_DIR$/source/candle_chart" />
+            <option value="$PROJECT_DIR$/source/base_view_chart" />
+            <option value="$PROJECT_DIR$/source/candlestick" />
+            <option value="$PROJECT_DIR$/source/chart" />
             <option value="$PROJECT_DIR$/source/company_list" />
             <option value="$PROJECT_DIR$/source/core" />
+            <option value="$PROJECT_DIR$/source/three_line_break" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

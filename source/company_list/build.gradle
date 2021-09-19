@@ -44,7 +44,7 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
 
     implementation project(":source:core")
-    implementation project(":source:candle_chart")
+    implementation project(':source:chart')
 
 
     //rx

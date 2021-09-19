@@ -14,5 +14,4 @@ enum class ColorCandle(val paint: Paint) {
         color = Color.GREEN
         strokeWidth = 5f
     })
-
 }

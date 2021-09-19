@@ -5,6 +5,7 @@ import ru.amk.core.candle.CandleRepositoryCore
 import ru.amk.core.company.CompanyRepositoryCore
 import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCore
 import ru.amk.core.favorite_company.room.FavoriteCompanyDAO
+import ru.amk.core.three_line_break.ThreeLineRepository
 import javax.inject.Singleton
 
 @Component(
@@ -14,6 +15,7 @@ import javax.inject.Singleton
 interface CoreComponent {
 
     fun getCandleRepositoryCore():CandleRepositoryCore
+    fun getThreeLineRepository():ThreeLineRepository
     fun getCompanyListRepositoryCore():CompanyRepositoryCore
     fun getFavoriteCompanyListRepositoryCore():FavoriteCompanyRepositoryCore
     fun getFavoriteCompanyDAO():FavoriteCompanyDAO

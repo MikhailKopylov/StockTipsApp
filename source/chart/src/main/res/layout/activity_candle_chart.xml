@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    tools:context=".CandleChartActivity">
+
+    <HorizontalScrollView
+        android:id="@+id/candle_sv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="90"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toStartOf="@+id/axisYView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UselessParent">
+
+<!--        <ru.amk.candle.view.CandlestickViewImpl-->
+<!--            android:id="@+id/candle_chart"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent" />-->
+    </HorizontalScrollView>
+
+<!--    <HorizontalScrollView-->
+<!--        android:id="@+id/three_line_break_sv"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_weight="90"-->
+<!--        android:background="@android:color/white"-->
+<!--        app:layout_constraintEnd_toStartOf="@+id/axisYView"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:ignore="UselessParent">-->
+<!--        <ru.amk.three_line_break.view.ThreeLineBreakViewImpl-->
+<!--            android:visibility="gone"-->
+<!--            android:id="@+id/three_line_break_chart"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent" />-->
+<!--    </HorizontalScrollView>-->
+
+    <ru.amk.base_view_chart.AxisYViewImpl
+        android:id="@+id/axisYView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/change_chart_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:clickable="true"
+        app:maxImageSize="40dp"
+        android:focusable="true"
+        android:backgroundTint="@color/SkyBlue"
+        android:src="@drawable/icon_three_line_break_chart"
+        app:fabSize="normal"
+        app:layout_anchorGravity="bottom|left|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

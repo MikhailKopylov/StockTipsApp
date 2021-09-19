@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import ru.amk.company_list.R
 import ru.amk.company_list.di.DaggerItemCompanyComponent
@@ -47,7 +46,6 @@ class CompanyListAdapter @Inject constructor(
 
         override fun onClick(v: View) {
             itemCompanyPresenter.onClickItem(adapterPosition)
-            Toast.makeText(v.context, "$adapterPosition", Toast.LENGTH_SHORT).show()
         }
 
         override fun onBind(position: Int) {

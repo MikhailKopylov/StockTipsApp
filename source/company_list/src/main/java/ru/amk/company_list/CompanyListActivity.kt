@@ -16,7 +16,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.amk.company_list.di.DaggerCompanyListComponent
 import ru.amk.company_list.list.CompanyListAdapter
@@ -179,7 +178,6 @@ class CompanyListActivity : AppCompatActivity() {
                     query?.let { companyListPresenter.filterCompany(query) }
                     return false
                 }
-
                 override fun onQueryTextChange(newText: String?): Boolean {
                     newText?.let { companyListPresenter.filterCompany(newText) }
                     return false
