@@ -13,10 +13,10 @@ import ru.amk.three_line_break.view.ThreeLineBreakView
 
 @Component(
     dependencies = [CoreComponent::class, AppProvider::class],
-    modules = [CandleModule::class]
+    modules = [ChartModule::class]
 )
 @ActivityScope
-interface CandleChartComponent {
+interface ChartComponent {
 
 
     fun inject(activity: CandleChartActivity)
@@ -24,7 +24,7 @@ interface CandleChartComponent {
     @Component.Builder
     interface CandleChartComponentBuilder {
 
-        fun build(): CandleChartComponent
+        fun build(): ChartComponent
 
         @BindsInstance
         fun candleChartView(candlestickView: CandlestickView): CandleChartComponentBuilder

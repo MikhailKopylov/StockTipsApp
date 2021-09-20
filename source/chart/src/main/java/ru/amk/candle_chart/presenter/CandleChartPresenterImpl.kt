@@ -8,7 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ru.amk.candle.CandleChartPresenter
-import ru.amk.candle_chart.repository.CandleRepository
+import ru.amk.candle_chart.repository.ChartRepository
 import ru.amk.base_view_chart.AxisYView
 import ru.amk.candle.view.CandlestickView
 import java.time.LocalDate
@@ -16,7 +16,7 @@ import java.time.Period
 import javax.inject.Inject
 
 class CandleChartPresenterImpl @Inject constructor(
-    private val candleRepository: CandleRepository,
+    private val chartRepository: ChartRepository,
     private val candlestickView: CandlestickView,
     private val axisYView: AxisYView,
     private val scrollView: HorizontalScrollView
@@ -34,7 +34,7 @@ class CandleChartPresenterImpl @Inject constructor(
     override fun onViewCreated(secId: String, dateTill: String) {
         val dateFrom = prevDate(dateTill)
         compositeDisposable.add(
-            candleRepository.getCandles(secId, dateFrom, dateTill)
+            chartRepository.getCandles(secId, dateFrom, dateTill)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({

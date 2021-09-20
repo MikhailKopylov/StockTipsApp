@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -144,6 +143,11 @@ class CompanyListActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        companyListPresenter.onViewResume()
+    }
+
     private fun Settings.updateViewsHeader() {
         val headerViewState = HeaderViewState(this@CompanyListActivity)
         when (stateSorting) {
@@ -187,12 +191,12 @@ class CompanyListActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_search) {
-            Toast.makeText(this, R.string.search_hint, Toast.LENGTH_SHORT).show()
-        }
-        return true
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == R.id.action_search) {
+//            Toast.makeText(this, R.string.search_hint, Toast.LENGTH_SHORT).show()
+//        }
+//        return true
+//    }
 
     @SuppressLint("CommitPrefEdits")
     override fun onStop() {

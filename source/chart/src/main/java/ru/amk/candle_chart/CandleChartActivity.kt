@@ -6,15 +6,21 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.*
 import android.widget.HorizontalScrollView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import ru.amk.candle_chart.di.DaggerCandleChartComponent
+import ru.amk.candle_chart.di.DaggerChartComponent
 import ru.amk.candle.CandleChartPresenter
 import ru.amk.base_view_chart.AxisYView
 import ru.amk.candle.view.CandlestickViewImpl
+import ru.amk.candle_chart.presenter.ChartPresenter
+import ru.amk.core.company.Company
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import ru.amk.three_line_break.ThreeLineBreakPresenter
@@ -24,8 +30,8 @@ import java.time.LocalDate
 import java.util.*
 import javax.inject.Inject
 
-private const val SEC_ID_COMPANY = "COMPANY_SEC_ID"
-private const val DATE_TILL = "DATE_TILL"
+private const val COMPANY = "Company"
+private const val FAVORITE = "Favorite"
 
 @SuppressLint("InflateParams")
 class CandleChartActivity : AppCompatActivity() {
@@ -36,6 +42,9 @@ class CandleChartActivity : AppCompatActivity() {
     @Inject
     lateinit var threeLineBreakPresenter: ThreeLineBreakPresenter
 
+    @Inject
+    lateinit var chartPresenter: ChartPresenter
+
     private val candlestickView: CandlestickViewImpl by lazy {
         layoutInflater.inflate(R.layout.view_candlestick, null) as CandlestickViewImpl
     }
@@ -45,15 +54,18 @@ class CandleChartActivity : AppCompatActivity() {
     private val axisYView: AxisYView by lazy { findViewById(R.id.axisYView) }
     private val scrollView: HorizontalScrollView by lazy { findViewById(R.id.candle_sv) }
     private val fab: FloatingActionButton by lazy { findViewById(R.id.change_chart_fab) }
+    private val toolbar: Toolbar by lazy { findViewById(R.id.chart_toolbar) }
+    private var isFavorite = false
+    private val company: Company by lazy {
+        return@lazy intent.getParcelableExtra<Company>(COMPANY) as Company
+    }
 
     companion object {
-        fun startCandleChartActivity(context: Context, secIdCompany: String, dateTill: String) {
+        fun startCandleChartActivity(context: Context, company: Company, isFavorite: Boolean) {
             context.startActivity(
-                Intent(
-                    context,
-                    CandleChartActivity::class.java
-                ).putExtra(SEC_ID_COMPANY, secIdCompany)
-                    .putExtra(DATE_TILL, dateTill)
+                Intent(context, CandleChartActivity::class.java)
+                    .putExtra(COMPANY, company as Parcelable)
+                    .putExtra(FAVORITE, isFavorite)
             )
         }
     }
@@ -62,23 +74,23 @@ class CandleChartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_candle_chart)
-
-        val secId = intent.getStringExtra(SEC_ID_COMPANY)
-        val dateTill = intent.getStringExtra(DATE_TILL)
+        setSupportActionBar(toolbar)
+        isFavorite = intent.getBooleanExtra(FAVORITE, false)
+        title = company.shortName
+        val secId = company.secId
+        val dateTill = company.date
 
         initView()
 
         initDagger()
 
-        secId?.let {
-            candlestickPresenter.onViewCreated(secId, dateTill ?: currentDay())
-            threeLineBreakPresenter.onViewCreated(secId, dateTill ?: currentDay())
-        } ?: Toast.makeText(this, "No such secId company", Toast.LENGTH_SHORT).show()
+        candlestickPresenter.onViewCreated(secId, dateTill )
+        threeLineBreakPresenter.onViewCreated(secId, dateTill )
 
     }
 
     private fun initDagger() {
-        DaggerCandleChartComponent.builder()
+        DaggerChartComponent.builder()
             .candleChartView(candlestickView)
             .threeLineBreakChartView(threeLineBreakViewView)
             .axisYView(axisYView)
@@ -120,6 +132,30 @@ class CandleChartActivity : AppCompatActivity() {
         super.onDestroy()
         candlestickPresenter.onCleared()
         threeLineBreakPresenter.onCleared()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.favorite_menu, menu)
+        menu?.let {
+            val favorite: MenuItem = it.findItem(R.id.favorite_item)
+            if (isFavorite) {
+                favorite.setIcon(R.drawable.favorite)
+            } else {
+                favorite.setIcon(R.drawable.non_favorite)
+            }
+        }
+        return true
+    }
+
+    fun favoriteClick(item: MenuItem) {
+        if (isFavorite) {
+            isFavorite = false
+            item.setIcon(R.drawable.non_favorite)
+        } else {
+            isFavorite = true
+            item.setIcon(R.drawable.favorite)
+        }
+        chartPresenter.changeFavoriteStatus(isFavorite, company)
     }
 
     @SuppressLint("SimpleDateFormat")

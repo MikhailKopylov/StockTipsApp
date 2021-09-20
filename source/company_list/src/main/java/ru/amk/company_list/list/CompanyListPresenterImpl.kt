@@ -22,14 +22,18 @@ class CompanyListPresenterImpl @Inject constructor(
     private var companyList = listOf<FavoriteCompany>()
     private var notFilterCompanyList = companyList
     private var filterCompanyName = ""
+    private val favoriteObservable by lazy {
+        favoriteCompanyRepositoryCore.getFavoriteCompanyList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+    private val allObservable by lazy {
+        companyListRepositoryCore.getAllCompany()
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
     @SuppressLint("CheckResult")
     override fun onViewCreated() {
-        val favoriteObservable = favoriteCompanyRepositoryCore.getFavoriteCompanyList()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-        val allObservable = companyListRepositoryCore.getAllCompany()
-            .observeOn(AndroidSchedulers.mainThread())
 
         compositeDisposable.add(
             Flowable
@@ -103,6 +107,32 @@ class CompanyListPresenterImpl @Inject constructor(
             companyList = sortedCompanyList
         }
         companyListView.notifyAllDataChange(companyList)
+    }
+
+    override fun onViewResume() {
+        filterCompany(filterCompanyName)
+        sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
+        companyListView.notifyAllDataChange(companyList)
+        compositeDisposable.add(favoriteObservable.map { companySet ->
+            notFilterCompanyList.map {
+                if (companySet.contains(it.company)) {
+                    FavoriteCompany(it.company, true)
+                } else {
+                    FavoriteCompany(it.company, false)
+                }
+            }.toList()
+        }
+            .subscribe({
+                companyList = it
+                notFilterCompanyList = it
+                filterCompany(filterCompanyName)
+                sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
+                companyListView.notifyAllDataChange(companyList)
+            }, {
+                //TODO add error handler
+            })
+        )
+
     }
 
 }

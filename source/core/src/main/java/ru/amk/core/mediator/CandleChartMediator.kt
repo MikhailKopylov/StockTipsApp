@@ -1,8 +1,13 @@
 package ru.amk.core.mediator
 
 import android.content.Context
+import ru.amk.core.company.Company
 
 interface CandleChartMediator {
 
-    fun openCandleChartScreen(context: Context, secIdCompany:String, dateTill:String)
+    fun openCandleChartScreen(
+        context: Context,
+        company: Company,
+        isFavorite: Boolean
+    )
 }

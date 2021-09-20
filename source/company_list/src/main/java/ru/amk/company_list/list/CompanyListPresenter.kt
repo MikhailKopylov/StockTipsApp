@@ -15,4 +15,5 @@ interface CompanyListPresenter {
     fun deleteCompanyFromFavorite(company: Company)
     fun onCleared()
     fun filterCompany(filterName: String)
+    fun onViewResume()
 }

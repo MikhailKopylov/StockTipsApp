@@ -5,6 +5,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import ru.amk.candle_chart.CandleChartMediatorImpl
 import ru.amk.company_list.R
+import ru.amk.core.company.Company
 import ru.amk.core.mediator.CandleChartMediator
 import javax.inject.Inject
 
@@ -22,15 +23,22 @@ class ItemViewImpl @Inject constructor(private val rootView: View) : ItemView {
         secIdTextView.text = secId
     }
 
-    override fun openCandleScreen(secId: String, dateTill: String) {
+    override fun openCandleScreen(
+        company:Company,
+        isFavorite: Boolean
+    ) {
         val candleChartMediator: CandleChartMediator = CandleChartMediatorImpl()
-        candleChartMediator.openCandleChartScreen(rootView.context, secId, dateTill)
+        candleChartMediator.openCandleChartScreen(
+            rootView.context,
+            company,
+            isFavorite
+        )
     }
 
     override fun setFavorite(favorite: Boolean) {
-        if(favorite){
+        if (favorite) {
             favoriteButton.setBackgroundResource(R.drawable.favorite)
-        }else{
+        } else {
             favoriteButton.setBackgroundResource(R.drawable.non_favorite)
         }
     }

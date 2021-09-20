@@ -19,8 +19,8 @@ class ItemCompanyPresenterImpl @Inject constructor(
 
     override fun onClickItem(adapterPosition: Int) {
         view.openCandleScreen(
-            companyListPresenter.getCompanyByPosition(adapterPosition).company.secId,
-            companyListPresenter.getCompanyByPosition(adapterPosition).company.date
+            companyListPresenter.getCompanyByPosition(adapterPosition).company,
+            companyListPresenter.getCompanyByPosition(adapterPosition).isFavorite
         )
     }
 
