@@ -6,6 +6,7 @@ import dagger.Component
 import ru.amk.candle_chart.CandleChartActivity
 import ru.amk.base_view_chart.AxisYView
 import ru.amk.candle.view.CandlestickView
+import ru.amk.candle_chart.ChartView
 import ru.amk.core.di.ActivityScope
 import ru.amk.core.di.AppProvider
 import ru.amk.core.di.CoreComponent
@@ -37,6 +38,9 @@ interface ChartComponent {
 
         @BindsInstance
         fun scrollView(scrollView: HorizontalScrollView): CandleChartComponentBuilder
+
+        @BindsInstance
+        fun chartView(chartView:ChartView):CandleChartComponentBuilder
 
         fun coreComponent(coreComponent: CoreComponent): CandleChartComponentBuilder
 

@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class Company(
     val shortName: String,
     val secId: String,
-    val date:String
+    val date:String,
+    val lastPrice:Double
 ):Parcelable

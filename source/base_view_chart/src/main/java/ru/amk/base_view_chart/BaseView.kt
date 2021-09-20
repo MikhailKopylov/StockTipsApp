@@ -34,7 +34,7 @@ abstract class BaseView @JvmOverloads constructor(
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
 
-        heightView = heightSize / 2
+        heightView = (heightSize / 1.5).toInt()
         coordZeroY = heightView - OFFSET_AXIS_Y
 
 
@@ -62,6 +62,7 @@ abstract class BaseView @JvmOverloads constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun onDrawCoordinateGrid(canvas: Canvas) {
         canvas.drawLine(coordZeroX, coordZeroY, coordEndXAxis, coordZeroY, Paints.paintAxis)//ось X
+        canvas.drawLine(coordZeroX, 0f, coordEndXAxis, 0f, Paints.paintAxis)//ось X
 
         for (item in 1..COUNT_OF_VALUE_Y_AXIS) {
             val startY = item * stepYAxis

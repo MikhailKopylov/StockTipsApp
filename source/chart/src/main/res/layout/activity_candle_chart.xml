@@ -31,11 +31,12 @@
         android:id="@+id/candle_sv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:layout_weight="90"
         android:background="@android:color/white"
         app:layout_constraintEnd_toStartOf="@+id/axisYView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chartBarLayout"
+        app:layout_constraintTop_toBottomOf="@+id/last_price_textview"
         tools:ignore="UselessParent">
 
     </HorizontalScrollView>
@@ -44,9 +45,25 @@
         android:id="@+id/axisYView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
+        android:layout_weight="5"
         android:background="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/candle_sv" />
+
+    <TextView
+        android:id="@+id/last_price_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:text="@string/last_price"
+        android:textColor="@color/dark"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chartBarLayout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -37,7 +37,7 @@ class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleSer
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {
-                    listCompany.add(Company(item.SHORTNAME, item.SECID, item.TRADEDATE))
+                    listCompany.add(Company(item.SHORTNAME, item.SECID, item.TRADEDATE, item.CLOSE))
                 }
                 //Если выходной, то поиск последнего рабочего дня
                 if (listCompany.isEmpty()) {

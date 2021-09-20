@@ -27,12 +27,12 @@ class FavoriteCompanyRepositoryCoreImpl @Inject constructor(private val favorite
 //            .subscribeOn(Schedulers.io())
             .map { listRoomCompany ->
                 listRoomCompany
-                    .map { Company(it.shortName, it.secId, it.date) }.toSet()
+                    .map { Company(it.shortName, it.secId, it.date, it.lastPrice) }.toSet()
             }
 
     override fun deleteCompanyFromFavorite(company: Company) {
         val roomCompany = with(company) {
-            RoomCompany(shortName, secId, date)
+            RoomCompany(shortName, secId, date,lastPrice)
         }
         Completable
             .fromAction{favoriteCompanyDAO.deleteCompany(roomCompany.secId)}
@@ -43,7 +43,7 @@ class FavoriteCompanyRepositoryCoreImpl @Inject constructor(private val favorite
 
     override fun addFavoriteCompany(company: Company) {
         val roomCompany = with(company) {
-            RoomCompany(shortName, secId, date)
+            RoomCompany(shortName, secId, date, lastPrice)
         }
         Completable
             .fromAction { favoriteCompanyDAO.add(roomCompany) }

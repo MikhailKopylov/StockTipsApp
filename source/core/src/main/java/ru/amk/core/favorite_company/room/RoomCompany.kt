@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class RoomCompany(
     val shortName: String,
     val secId: String,
-    val date:String
+    val date:String,
+    val lastPrice:Double
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

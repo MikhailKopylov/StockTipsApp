@@ -11,7 +11,7 @@ object Paints {
     }
 
     val paintAxisDottedLine = Paint().apply {
-        color = Color.BLACK
+        color = Color.DKGRAY
         style = Paint.Style.FILL
         strokeWidth = 1f
         pathEffect = DashPathEffect(floatArrayOf(5f, 15f), 0f)

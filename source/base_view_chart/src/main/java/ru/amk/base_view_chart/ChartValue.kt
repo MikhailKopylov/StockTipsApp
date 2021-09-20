@@ -2,7 +2,7 @@ package ru.amk.base_view_chart
 
 object ChartValue {
     const val OFFSET_AXIS_Y = 50f
-    const val COUNT_OF_VALUE_Y_AXIS = 5
+    const val COUNT_OF_VALUE_Y_AXIS = 7
     const val SEGMENT_LENGTH = 5f
 
     var coordZeroX = 0f// начало оси X

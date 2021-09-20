@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View.*
 import android.widget.HorizontalScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
@@ -33,8 +34,12 @@ import javax.inject.Inject
 private const val COMPANY = "Company"
 private const val FAVORITE = "Favorite"
 
+interface ChartView {
+    fun setPrice(price: String)
+}
+
 @SuppressLint("InflateParams")
-class CandleChartActivity : AppCompatActivity() {
+class CandleChartActivity : AppCompatActivity(), ChartView {
 
     @Inject
     lateinit var candlestickPresenter: CandleChartPresenter
@@ -45,6 +50,7 @@ class CandleChartActivity : AppCompatActivity() {
     @Inject
     lateinit var chartPresenter: ChartPresenter
 
+    private var isFavorite = false
     private val candlestickView: CandlestickViewImpl by lazy {
         layoutInflater.inflate(R.layout.view_candlestick, null) as CandlestickViewImpl
     }
@@ -55,7 +61,7 @@ class CandleChartActivity : AppCompatActivity() {
     private val scrollView: HorizontalScrollView by lazy { findViewById(R.id.candle_sv) }
     private val fab: FloatingActionButton by lazy { findViewById(R.id.change_chart_fab) }
     private val toolbar: Toolbar by lazy { findViewById(R.id.chart_toolbar) }
-    private var isFavorite = false
+    private val lastPriceTextView: TextView by lazy { findViewById(R.id.last_price_textview) }
     private val company: Company by lazy {
         return@lazy intent.getParcelableExtra<Company>(COMPANY) as Company
     }
@@ -63,9 +69,9 @@ class CandleChartActivity : AppCompatActivity() {
     companion object {
         fun startCandleChartActivity(context: Context, company: Company, isFavorite: Boolean) {
             context.startActivity(
-                Intent(context, CandleChartActivity::class.java)
-                    .putExtra(COMPANY, company as Parcelable)
-                    .putExtra(FAVORITE, isFavorite)
+                    Intent(context, CandleChartActivity::class.java)
+                            .putExtra(COMPANY, company as Parcelable)
+                            .putExtra(FAVORITE, isFavorite)
             )
         }
     }
@@ -80,28 +86,29 @@ class CandleChartActivity : AppCompatActivity() {
         val secId = company.secId
         val dateTill = company.date
 
+        initDagger()
         initView()
 
-        initDagger()
 
-        candlestickPresenter.onViewCreated(secId, dateTill )
-        threeLineBreakPresenter.onViewCreated(secId, dateTill )
+        candlestickPresenter.onViewCreated(secId, dateTill)
+        threeLineBreakPresenter.onViewCreated(secId, dateTill)
 
     }
 
     private fun initDagger() {
         DaggerChartComponent.builder()
-            .candleChartView(candlestickView)
-            .threeLineBreakChartView(threeLineBreakViewView)
-            .axisYView(axisYView)
-            .scrollView(scrollView)
-            .appProvider((application as AppWithFacade).getAppProvider())
-            .coreComponent(
-                DaggerCoreComponent.builder()
-                    .appProvider((application as AppWithFacade).getAppProvider()).build()
-            )
-            .build()
-            .inject(this)
+                .chartView(this)
+                .candleChartView(candlestickView)
+                .threeLineBreakChartView(threeLineBreakViewView)
+                .axisYView(axisYView)
+                .scrollView(scrollView)
+                .appProvider((application as AppWithFacade).getAppProvider())
+                .coreComponent(
+                        DaggerCoreComponent.builder()
+                                .appProvider((application as AppWithFacade).getAppProvider()).build()
+                )
+                .build()
+                .inject(this)
     }
 
     private fun initView() {
@@ -111,6 +118,7 @@ class CandleChartActivity : AppCompatActivity() {
             scrollView.scrollBy(450, 0)
         }
 
+        chartPresenter.setLastPrice(company.lastPrice)
         fab.setOnClickListener {
             if (candlestickView.isVisible()) {
                 candlestickView.visibility = GONE
@@ -161,8 +169,12 @@ class CandleChartActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.O)
     private fun currentDay() = LocalDate.parse(
-        SimpleDateFormat("yyyy-MM-dd").format(Date())
+            SimpleDateFormat("yyyy-MM-dd").format(Date())
     ).minusDays(1L).toString()
+
+    override fun setPrice(price: String) {
+        lastPriceTextView.text = price
+    }
 
 
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="Favorite">Избранное</string>
+    <string name="last_price">0.0 </string>
 </resources>
