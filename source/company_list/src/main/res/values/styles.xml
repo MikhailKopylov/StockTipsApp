@@ -6,10 +6,10 @@
         <item name="cardElevation">2dp</item>
         <item name="cardMaxElevation">4dp</item>
 
-        <item name="contentPaddingBottom">12dp</item>
-        <item name="contentPaddingTop">12dp</item>
-        <item name="contentPaddingLeft">16dp</item>
-        <item name="contentPaddingRight">16dp</item>
+        <item name="contentPaddingBottom">8dp</item>
+        <item name="contentPaddingTop">0dp</item>
+        <item name="contentPaddingLeft">0dp</item>
+        <item name="contentPaddingRight">8dp</item>
         <item name="cardBackgroundColor">@color/white</item>
 <!--        <item name="cardMaxElevation">12dp</item>-->
         <item name="cardPreventCornerOverlap">true</item>

@@ -26,7 +26,7 @@ class CandleRepositoryCoreNetwork @Inject constructor(private val moexCandleServ
                     val colorCandle = setColorCandle(item)
                     listCompany.add(
                         with(item) {
-                            Candle(HIGH, LOW, OPEN, CLOSE, TRADEDATE, colorCandle)
+                            Candle(HIGH, LOW, OPEN, LEGALCLOSEPRICE, TRADEDATE, colorCandle)
                         }
                     )
                 }
@@ -35,7 +35,7 @@ class CandleRepositoryCoreNetwork @Inject constructor(private val moexCandleServ
     }
 
     private fun setColorCandle(item: MoexData) =
-        if (item.OPEN < item.CLOSE) {
+        if (item.OPEN < item.LEGALCLOSEPRICE) {
             ColorCandle.UP
         } else {
             ColorCandle.DOWN

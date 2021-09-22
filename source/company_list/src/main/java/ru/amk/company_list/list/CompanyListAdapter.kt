@@ -29,7 +29,7 @@ class CompanyListAdapter @Inject constructor(
         @Inject
         lateinit var itemCompanyPresenter: ItemCompanyPresenter
 
-        private var favoriteButton:ImageButton = itemView.findViewById(R.id.favorite_button)
+        private val favoriteButton:ImageButton by lazy{ itemView.findViewById(R.id.favorite_button)}
 
         init {
             itemView.setOnClickListener(this)

@@ -8,7 +8,9 @@ data class RoomCompany(
     val shortName: String,
     val secId: String,
     val date:String,
-    val lastPrice:Double
+    val lastPrice:Double,
+    val changePrice:Double,
+    val changePricePercent:Double
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

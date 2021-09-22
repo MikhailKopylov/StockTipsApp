@@ -11,16 +11,18 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.amk.company_list.di.DaggerCompanyListComponent
 import ru.amk.company_list.list.CompanyListAdapter
 import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.company_list.list.CompanyListViewImpl
-import ru.amk.company_list.repository.HeaderViewState
+import ru.amk.company_list.list.HeaderViewState
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
@@ -37,10 +39,9 @@ class CompanyListActivity : AppCompatActivity() {
     private val companyListRW: CompanyListViewImpl by lazy { findViewById(R.id.company_list_rw) }
     private val sortByNameTextView: TextView by lazy { findViewById(R.id.sort_by_name_text_view) }
     private val sortBySecidTextView: TextView by lazy { findViewById(R.id.sort_by_secid_text_view) }
-    private val nameOrderRightImageButton: ImageButton by lazy { findViewById(R.id.name_order_right_image_button) }
-    private val secidOrderRightImageButton: ImageButton by lazy { findViewById(R.id.secid_order_right_image_button) }
-    private val nameOrderReverseImageButton: ImageButton by lazy { findViewById(R.id.name_order_reverse_image_button) }
-    private val secidOrderReverseImageButton: ImageButton by lazy { findViewById(R.id.secid_order_reverse_image_button) }
+    private val sortByPriceTextView: TextView by lazy { findViewById(R.id.sort_by_price_text_view) }
+    private val orderImageButton: ImageButton by lazy { findViewById(R.id.name_right_order_image_button) }
+    private val favoriteToUpCheckBox: CheckBox by lazy { findViewById<CheckBox>(R.id.favorite_to_up_switch)}
     private val toolbar: Toolbar by lazy { findViewById(R.id.toolbar) }
 
     companion object {
@@ -60,15 +61,21 @@ class CompanyListActivity : AppCompatActivity() {
         daggerBuilder(companyListRW)
         companyListRW.layoutManager = LinearLayoutManager(this)
         companyListRW.adapter = companyListAdapter
-        sorted()
+        companyListRW.addItemDecoration(
+            DividerItemDecoration(
+                companyListRW.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
 
         val settingsLoad: SharedPreferences = getPreferences(MODE_PRIVATE)
         val sortByNumber = settingsLoad.getInt(Settings.SORT_BY_KEY, 0)
         Settings.sortedBy = enumValues<SortedBy>()[sortByNumber]
         Settings.favoriteUp = settingsLoad.getBoolean(Settings.FAVORITE_UP_KEY, false)
         checkFavoriteToUp()
+        sorted()
+        update()
     }
-
 
     private fun daggerBuilder(companyListRW: CompanyListViewImpl) {
         DaggerCompanyListComponent.builder()
@@ -88,38 +95,50 @@ class CompanyListActivity : AppCompatActivity() {
         with(Settings) {
             sortByNameTextView.setOnClickListener {
                 sortedBy = SortedBy.NAME
-                orderBy = OrderBy.RIGHT
+                orderBy = when (stateSorting) {
+                    SortHandler.StateSort.NAME_REVERSE_FAV_FALSE, SortHandler.StateSort.NAME_REVERSE_FAV_TRUE -> {
+                        OrderBy.RIGHT
+                    }
+                    SortHandler.StateSort.NAME_RIGHT_FAV_FALSE, SortHandler.StateSort.NAME_RIGHT_FAV_TRUE -> {
+                        OrderBy.REVERS
+                    }
+                    else -> {
+                        OrderBy.RIGHT
+                    }
+                }
                 update()
             }
             sortBySecidTextView.setOnClickListener {
                 sortedBy = SortedBy.SEC_ID
-                orderBy = OrderBy.RIGHT
+                orderBy = when (stateSorting) {
+                    SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE, SortHandler.StateSort.SEC_ID_REVERSE_FAV_TRUE -> {
+                        OrderBy.RIGHT
+                    }
+                    SortHandler.StateSort.SEC_ID_RIGHT_FAV_FALSE, SortHandler.StateSort.SEC_ID_RIGHT_FAV_TRUE -> {
+                        OrderBy.REVERS
+                    }
+                    else -> {
+                        OrderBy.RIGHT
+                    }
+                }
                 update()
             }
-            nameOrderRightImageButton.setOnClickListener {
-                if (stateSorting.ordinal in 0..3) {
-                    orderBy = OrderBy.RIGHT
-                    update()
+            sortByPriceTextView.setOnClickListener {
+                sortedBy = SortedBy.PRICE
+                orderBy = when (stateSorting) {
+                    SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE, SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE -> {
+                        OrderBy.RIGHT
+                    }
+                    SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE, SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE -> {
+                        OrderBy.REVERS
+                    }
+                    else -> {
+                        OrderBy.RIGHT
+                    }
                 }
+                update()
             }
-            secidOrderRightImageButton.setOnClickListener {
-                if (stateSorting.ordinal in 4..7) {
-                    orderBy = OrderBy.RIGHT
-                    update()
-                }
-            }
-            nameOrderReverseImageButton.setOnClickListener {
-                if (stateSorting.ordinal in 0..3) {
-                    orderBy = OrderBy.REVERS
-                    update()
-                }
-            }
-            secidOrderReverseImageButton.setOnClickListener {
-                if (stateSorting.ordinal in 4..7) {
-                    orderBy = OrderBy.REVERS
-                    update()
-                }
-            }
+
         }
     }
 
@@ -128,15 +147,30 @@ class CompanyListActivity : AppCompatActivity() {
         if (Settings.favoriteUp) {
             findViewById<CheckBox>(R.id.favorite_to_up_switch).isChecked = true
         }
-        findViewById<CheckBox>(R.id.favorite_to_up_switch).setOnCheckedChangeListener { _, isChecked ->
+        favoriteToUpCheckBox.setOnCheckedChangeListener { _, isChecked ->
             Settings.favoriteUp = isChecked
             update()
         }
+        findViewById<ImageView>(R.id.favorite_image_view).setOnClickListener {
+            Settings.favoriteUp = reverseToUp()
+            favoriteToUpCheckBox.isChecked = Settings.favoriteUp
+            update()
+        }
+        findViewById<ImageView>(R.id.favorite_up_image_view).setOnClickListener {
+            Settings.favoriteUp = reverseToUp()
+            favoriteToUpCheckBox.isChecked = Settings.favoriteUp
+            update()
+        }
+
+    }
+
+    private fun reverseToUp(): Boolean {
+        return !favoriteToUpCheckBox.isChecked
     }
 
     @SuppressLint("ResourceAsColor")
     private fun update() {
-        companyListPresenter.sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
+            companyListPresenter.sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
         companyListRW.scrollToPosition(0)
         with(Settings) {
             updateViewsHeader()
@@ -167,7 +201,16 @@ class CompanyListActivity : AppCompatActivity() {
             SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE -> {
                 headerViewState.secIdReverse()
             }
+            SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE ,
+            SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE ->  {
+                headerViewState.priceRight()
+            }
+            SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE ,
+            SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE -> {
+                headerViewState.priceReverse()
+            }
         }
+        headerViewState.selectFavoriteUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -182,6 +225,7 @@ class CompanyListActivity : AppCompatActivity() {
                     query?.let { companyListPresenter.filterCompany(query) }
                     return false
                 }
+
                 override fun onQueryTextChange(newText: String?): Boolean {
                     newText?.let { companyListPresenter.filterCompany(newText) }
                     return false

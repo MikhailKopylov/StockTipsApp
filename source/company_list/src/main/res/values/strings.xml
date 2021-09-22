@@ -5,4 +5,7 @@
     <string name="by_secid">ТИКЕР</string>
     <string name="favorite_to_up">Сначала избранное</string>
     <string name="search_hint">Поиск компании</string>
+    <string name="Price">ЦЕНА</string>
+    <string name="change_price">1.00</string>
+    <string name="change_percent">(1.00%)</string>
 </resources>

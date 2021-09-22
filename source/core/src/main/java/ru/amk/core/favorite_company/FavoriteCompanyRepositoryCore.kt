@@ -6,6 +6,7 @@ import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ru.amk.core.company.Company
+import ru.amk.core.company.CompanyWithoutChangePrice
 import ru.amk.core.favorite_company.room.FavoriteCompanyDAO
 import ru.amk.core.favorite_company.room.RoomCompany
 import ru.amk.core.favorite_company.room.StockDatabase
@@ -24,18 +25,26 @@ class FavoriteCompanyRepositoryCoreImpl @Inject constructor(private val favorite
 
     override fun getFavoriteCompanyList(): Flowable<Set<Company>> =
         favoriteCompanyDAO.getAllCompany()
-//            .subscribeOn(Schedulers.io())
             .map { listRoomCompany ->
                 listRoomCompany
-                    .map { Company(it.shortName, it.secId, it.date, it.lastPrice) }.toSet()
+                    .map {
+                        Company(
+                            it.shortName,
+                            it.secId,
+                            it.date,
+                            it.lastPrice,
+                            it.changePrice,
+                            it.changePricePercent
+                        )
+                    }.toSet()
             }
 
     override fun deleteCompanyFromFavorite(company: Company) {
         val roomCompany = with(company) {
-            RoomCompany(shortName, secId, date,lastPrice)
+            RoomCompany(shortName, secId, date, lastPrice, changePrice, changePricePercent)
         }
         Completable
-            .fromAction{favoriteCompanyDAO.deleteCompany(roomCompany.secId)}
+            .fromAction { favoriteCompanyDAO.deleteCompany(roomCompany.secId) }
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
@@ -43,7 +52,7 @@ class FavoriteCompanyRepositoryCoreImpl @Inject constructor(private val favorite
 
     override fun addFavoriteCompany(company: Company) {
         val roomCompany = with(company) {
-            RoomCompany(shortName, secId, date, lastPrice)
+            RoomCompany(shortName, secId, date, lastPrice, changePrice, changePricePercent)
         }
         Completable
             .fromAction { favoriteCompanyDAO.add(roomCompany) }

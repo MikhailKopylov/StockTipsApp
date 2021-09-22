@@ -21,6 +21,7 @@ import ru.amk.candle.CandleChartPresenter
 import ru.amk.base_view_chart.AxisYView
 import ru.amk.candle.view.CandlestickViewImpl
 import ru.amk.candle_chart.presenter.ChartPresenter
+import ru.amk.core.candle.ColorCandle
 import ru.amk.core.company.Company
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
@@ -36,6 +37,7 @@ private const val FAVORITE = "Favorite"
 
 interface ChartView {
     fun setPrice(price: String)
+    fun setChangePrice(changePrice:String, color:ColorCandle)
 }
 
 @SuppressLint("InflateParams")
@@ -62,6 +64,7 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
     private val fab: FloatingActionButton by lazy { findViewById(R.id.change_chart_fab) }
     private val toolbar: Toolbar by lazy { findViewById(R.id.chart_toolbar) }
     private val lastPriceTextView: TextView by lazy { findViewById(R.id.last_price_textview) }
+    private val changePriceTextView: TextView by lazy { findViewById(R.id.change_price_textview) }
     private val company: Company by lazy {
         return@lazy intent.getParcelableExtra<Company>(COMPANY) as Company
     }
@@ -81,6 +84,10 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_candle_chart)
         setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
         isFavorite = intent.getBooleanExtra(FAVORITE, false)
         title = company.shortName
         val secId = company.secId
@@ -118,7 +125,8 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
             scrollView.scrollBy(450, 0)
         }
 
-        chartPresenter.setLastPrice(company.lastPrice)
+        chartPresenter.setLastPrice(company)
+        chartPresenter.setChangePrice(company)
         fab.setOnClickListener {
             if (candlestickView.isVisible()) {
                 candlestickView.visibility = GONE
@@ -174,6 +182,11 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
 
     override fun setPrice(price: String) {
         lastPriceTextView.text = price
+    }
+
+    override fun setChangePrice(changePrice: String, color:ColorCandle) {
+        changePriceTextView.text = changePrice
+        changePriceTextView.setTextColor(color.paint.color)
     }
 
 

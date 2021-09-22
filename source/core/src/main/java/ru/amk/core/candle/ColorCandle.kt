@@ -11,7 +11,7 @@ enum class ColorCandle(val paint: Paint) {
     }),
 
     UP(Paint().apply {
-        color = Color.GREEN
+        color = Color.rgb(0, 128, 0)
         strokeWidth = 5f
     })
 }

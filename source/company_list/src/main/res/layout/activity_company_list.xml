@@ -26,106 +26,173 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <ru.amk.company_list.list.CompanyListViewImpl
         android:id="@+id/company_list_rw"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favorite_to_up_switch"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/sort_by_price_text_view"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/item_company" />
 
     <TextView
         android:id="@+id/sort_by_name_text_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="start"
-        android:paddingStart="24dp"
+        android:layout_marginEnd="8dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
         android:text="@string/by_name"
         android:textColor="@color/gray600"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/sort_by_secid_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sort_by_secid_text_view"
-        app:layout_constraintWidth_percent="0.3" />
-
+        app:layout_constraintWidth_percent="0.15" />
 
     <TextView
         android:id="@+id/sort_by_secid_text_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="start"
-        android:paddingStart="24dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
         android:text="@string/by_secid"
         android:textColor="@color/dark"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/favorite_to_up_switch"
-        app:layout_constraintStart_toEndOf="@+id/sort_by_name_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintWidth_percent="0.34" />
+        app:layout_constraintEnd_toStartOf="@+id/guideline1"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintTop_toTopOf="@+id/favorite_to_up_switch"
+        app:layout_constraintWidth_percent="0.22" />
+
+    <TextView
+        android:id="@+id/sort_by_price_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center"
+        android:text="@string/Price"
+        android:textColor="@color/dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/sort_by_secid_text_view"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_to_up_switch"
+        app:layout_constraintStart_toStartOf="@+id/guideline1"
+        app:layout_constraintTop_toTopOf="@+id/sort_by_secid_text_view"
+        app:layout_constraintWidth_percent="0.24" />
 
     <ImageButton
-        android:id="@+id/name_order_right_image_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="4dp"
+        android:id="@+id/name_right_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="16dp"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/name_order_reverse_image_button"
-        app:layout_constraintEnd_toStartOf="@+id/name_order_reverse_image_button"
-        app:layout_constraintTop_toTopOf="@+id/name_order_reverse_image_button"
-        app:srcCompat="@drawable/arrow_down_not_select" />
-
-    <ImageButton
-        android:id="@+id/secid_order_right_image_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="4dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/name_order_reverse_image_button"
-        app:layout_constraintEnd_toStartOf="@+id/secid_order_reverse_image_button"
-        app:layout_constraintTop_toTopOf="@+id/name_order_reverse_image_button"
-        app:srcCompat="@drawable/arrow_down_select" />
-
-
-    <ImageButton
-        android:id="@+id/name_order_reverse_image_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/sort_by_name_text_view"
         app:layout_constraintEnd_toEndOf="@+id/sort_by_name_text_view"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sort_by_name_text_view"
-        app:srcCompat="@drawable/arrow_up_not_select" />
+        app:srcCompat="@drawable/select_right" />
 
     <ImageButton
-        android:id="@+id/secid_order_reverse_image_button"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:id="@+id/name_reverse_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:background="@null"
-        app:layout_constraintBottom_toBottomOf="@+id/secid_order_right_image_button"
-        app:layout_constraintEnd_toEndOf="@+id/sort_by_secid_text_view"
-        app:layout_constraintTop_toTopOf="@+id/secid_order_right_image_button"
-        app:srcCompat="@drawable/arrow_up_not_select" />
+        app:layout_constraintStart_toStartOf="@+id/name_right_order_image_button"
+        app:layout_constraintTop_toBottomOf="@+id/name_right_order_image_button"
+        app:srcCompat="@drawable/not_select_reverse" />
+
+    <ImageButton
+        android:id="@+id/sec_id_right_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        app:layout_constraintEnd_toStartOf="@+id/sort_by_secid_text_view"
+        app:layout_constraintTop_toTopOf="@+id/name_right_order_image_button"
+        app:srcCompat="@drawable/select_right" />
+
+    <ImageButton
+        android:id="@+id/sec_id_reverse_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="@+id/sec_id_right_order_image_button"
+        app:layout_constraintTop_toBottomOf="@+id/sec_id_right_order_image_button"
+        app:srcCompat="@drawable/not_select_reverse" />
+
+    <ImageButton
+        android:id="@+id/price_right_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        app:layout_constraintEnd_toStartOf="@+id/sort_by_price_text_view"
+        app:layout_constraintTop_toTopOf="@+id/sec_id_right_order_image_button"
+        app:srcCompat="@drawable/select_right" />
+
+    <ImageButton
+        android:id="@+id/price_reverse_order_image_button"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:background="@null"
+        app:layout_constraintEnd_toEndOf="@+id/price_right_order_image_button"
+        app:layout_constraintTop_toBottomOf="@+id/price_right_order_image_button"
+        app:srcCompat="@drawable/not_select_reverse" />
 
     <CheckBox
         android:id="@+id/favorite_to_up_switch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="@string/favorite_to_up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/sort_by_secid_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintWidth_percent="0.32"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        android:layout_marginEnd="8dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_up_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
+    <ImageButton
+        android:id="@+id/favorite_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/favorite_to_up_switch"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_up_image_view"
+        app:layout_constraintTop_toTopOf="@+id/favorite_to_up_switch"
+        app:srcCompat="@drawable/favorite" />
+
+    <ImageButton
+        android:id="@+id/favorite_up_image_view"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="8dp"
+        android:background="@null"
+        app:layout_constraintBottom_toBottomOf="@+id/favorite_to_up_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/favorite_to_up_switch"
+        app:srcCompat="@drawable/arrow_up_not_select" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.38" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.58" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

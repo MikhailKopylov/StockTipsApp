@@ -29,27 +29,71 @@ class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleSer
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("CheckResult")
-    override fun getCompanyList(date: String): Single<List<Company>> {
+    override fun getCompanyList(date: String): Single<List<Company>> =
+        getCompanyWithoutChangePrice(date).flatMap { companyPresentDay ->
+            val prevDay =
+                LocalDate.parse(companyPresentDay.map {
+                    it.value.date
+                }.first { true }).minusDays(1L)
+                    .toString()
+            getCompanyWithoutChangePrice(prevDay).flatMap {
+                Single.just(calcChangePrice(companyPresentDay, it))
+            }
+        }
 
-        val listCompany = mutableListOf<Company>()
+
+    private fun calcChangePrice(
+        companyPresentDay: Map<String, CompanyWithoutChangePrice>,
+        companyPrevDay: Map<String, CompanyWithoutChangePrice>
+    ): List<Company> {
+        val companyList = mutableListOf<Company>()
+        companyPresentDay.map { companyMap ->
+            val changePrice =
+                companyPrevDay[companyMap.key]?.let { companyMap.value.lastPrice - it.lastPrice }
+                    ?: 0.0
+            val changePricePercent =
+                companyPrevDay[companyMap.key]?.let { (companyMap.value.lastPrice / it.lastPrice * 100) - 100 }
+                    ?: 0.0
+            with(companyMap.value) {
+                companyList.add(
+                    Company(
+                        shortName,
+                        secId,
+                        date,
+                        lastPrice,
+                        changePrice,
+                        changePricePercent
+                    )
+                )
+            }
+        }
+        return companyList
+    }
+
+    override fun getCurrentDate(): String = _date
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCompanyWithoutChangePrice(date: String): Single<Map<String, CompanyWithoutChangePrice>> {
+        val listCompany = mutableMapOf<String, CompanyWithoutChangePrice>()
         return moexCandleServiceNetwork
             .getMoexCandleServiceAllCompany(START_PAGE, date)
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {
-                    listCompany.add(Company(item.SHORTNAME, item.SECID, item.TRADEDATE, item.CLOSE))
+                    listCompany[item.SECID] = CompanyWithoutChangePrice(
+                        item.SHORTNAME,
+                        item.SECID,
+                        item.TRADEDATE,
+                        item.LEGALCLOSEPRICE
+                    )
                 }
                 //Если выходной, то поиск последнего рабочего дня
                 if (listCompany.isEmpty()) {
                     _prevDate = LocalDate.parse(date).minusDays(1L).toString()
-                    getCompanyList(_prevDate)
+                    getCompanyWithoutChangePrice(_prevDate)
                 } else {
                     Single.just(listCompany)
                 }
             }
     }
-
-    override fun getCurrentDate(): String = _date
-
-
 }

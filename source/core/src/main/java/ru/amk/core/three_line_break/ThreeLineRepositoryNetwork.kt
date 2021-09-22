@@ -22,19 +22,27 @@ class ThreeLineRepositoryNetwork @Inject constructor(private val moexCandleServi
                 val moexCandleList = moexCandle.convertFromRaw()
                 val threeLineBreak: ThreeLineBreak
                 with(moexCandleList[0]) {
-                    threeLineBreak = ThreeLineBreak(CLOSE, CLOSE, TRADEDATE, ColorCandle.UP)
+                    threeLineBreak =
+                        ThreeLineBreak(LEGALCLOSEPRICE, LEGALCLOSEPRICE, TRADEDATE, ColorCandle.UP)
                 }
                 val result: MutableList<ThreeLineBreak> = mutableListOf(threeLineBreak)
                 for (item in moexCandleList) {
                     val maxPrice = result.last().maxPrice
                     val minPrice = result.last().minPrice
-                    if (item.CLOSE > maxPrice) {
-                        result.add(ThreeLineBreak(item.CLOSE, maxPrice, item.TRADEDATE, ColorCandle.UP))
-                    } else if (item.CLOSE < minPrice) {
+                    if (item.LEGALCLOSEPRICE > maxPrice) {
+                        result.add(
+                            ThreeLineBreak(
+                                item.LEGALCLOSEPRICE,
+                                maxPrice,
+                                item.TRADEDATE,
+                                ColorCandle.UP
+                            )
+                        )
+                    } else if (item.LEGALCLOSEPRICE < minPrice) {
                         result.add(
                             ThreeLineBreak(
                                 minPrice,
-                                item.CLOSE,
+                                item.LEGALCLOSEPRICE,
                                 item.TRADEDATE,
                                 ColorCandle.DOWN
                             )

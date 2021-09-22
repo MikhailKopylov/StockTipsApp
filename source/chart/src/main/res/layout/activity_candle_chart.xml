@@ -31,7 +31,6 @@
         android:id="@+id/candle_sv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_weight="90"
         android:background="@android:color/white"
         app:layout_constraintEnd_toStartOf="@+id/axisYView"
@@ -52,19 +51,33 @@
 
     <TextView
         android:id="@+id/last_price_textview"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="24dp"
-        android:gravity="center"
+        app:layout_constraintHorizontal_weight="50"
+        android:gravity="center|bottom"
         android:text="@string/last_price"
         android:textColor="@color/dark"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chartBarLayout" />
+
+    <TextView
+        android:id="@+id/change_price_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="start|bottom"
+        android:text="@string/last_price"
+        android:textColor="@color/dark"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@+id/last_price_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/last_price_textview" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/change_chart_fab"

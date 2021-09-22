@@ -2,6 +2,9 @@ package ru.amk.company_list.item
 
 import ru.amk.company_list.FavoriteCompany
 import ru.amk.company_list.list.CompanyListPresenter
+import ru.amk.core.candle.ColorCandle
+import ru.amk.core.percentFormat
+import ru.amk.core.priceFormat
 import javax.inject.Inject
 
 
@@ -15,6 +18,16 @@ class ItemCompanyPresenterImpl @Inject constructor(
         view.setCompanyName(company.company.shortName)
         view.setCompanySetId(company.company.secId)
         view.setFavorite(company.isFavorite)
+        val colorText: ColorCandle = if (company.company.changePrice >= 0) {
+            ColorCandle.UP
+        } else {
+            ColorCandle.DOWN
+        }
+        val changePriceFormat = company.company.changePrice.priceFormat(company.company.lastPrice)
+        val changePercentFormat = company.company.changePricePercent.percentFormat(company.company.lastPrice)
+        view.setPriceChange("$changePriceFormat ₽", colorText)
+        view.setPercentChange("($changePercentFormat%)", colorText)
+
     }
 
     override fun onClickItem(adapterPosition: Int) {

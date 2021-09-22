@@ -10,7 +10,11 @@
         android:roundIcon="@mipmap/ic_launcher_stock_tips_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.StockTipsApp">
+        <activity
+            android:name="ru.amk.candle_chart.CandleChartActivity"
+            android:parentActivityName="ru.amk.company_list.CompanyListActivity">
 
+        </activity>
     </application>
 
 </manifest>
