@@ -40,7 +40,7 @@ class ChartPresenterImpl @Inject constructor(
             ColorCandle.DOWN
         }
         val changePriceFormat = company.changePrice.priceFormat(company.lastPrice)
-        val changePercentFormat = company.changePricePercent.percentFormat(company.lastPrice)
+        val changePercentFormat = company.changePricePercent.percentFormat()
         val changePrice = "$changePriceFormat ₽ ($changePercentFormat%)"
         chartView.setChangePrice(changePrice, color)
     }

@@ -24,7 +24,7 @@ class ItemCompanyPresenterImpl @Inject constructor(
             ColorCandle.DOWN
         }
         val changePriceFormat = company.company.changePrice.priceFormat(company.company.lastPrice)
-        val changePercentFormat = company.company.changePricePercent.percentFormat(company.company.lastPrice)
+        val changePercentFormat = company.company.changePricePercent.percentFormat()
         view.setPriceChange("$changePriceFormat ₽", colorText)
         view.setPercentChange("($changePercentFormat%)", colorText)
 

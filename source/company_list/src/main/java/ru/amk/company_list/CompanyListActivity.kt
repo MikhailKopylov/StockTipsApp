@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.CheckBox
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
@@ -18,6 +17,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ru.amk.company_list.di.DaggerCompanyListComponent
 import ru.amk.company_list.list.CompanyListAdapter
 import ru.amk.company_list.list.CompanyListPresenter
@@ -27,7 +27,10 @@ import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
 
-class CompanyListActivity : AppCompatActivity() {
+interface RefreshDataView{
+    fun refreshDone()
+}
+class CompanyListActivity : AppCompatActivity(), RefreshDataView {
 
 
     @Inject
@@ -40,9 +43,9 @@ class CompanyListActivity : AppCompatActivity() {
     private val sortByNameTextView: TextView by lazy { findViewById(R.id.sort_by_name_text_view) }
     private val sortBySecidTextView: TextView by lazy { findViewById(R.id.sort_by_secid_text_view) }
     private val sortByPriceTextView: TextView by lazy { findViewById(R.id.sort_by_price_text_view) }
-    private val orderImageButton: ImageButton by lazy { findViewById(R.id.name_right_order_image_button) }
-    private val favoriteToUpCheckBox: CheckBox by lazy { findViewById<CheckBox>(R.id.favorite_to_up_switch)}
+    private val favoriteToUpCheckBox: CheckBox by lazy { findViewById(R.id.favorite_to_up_switch) }
     private val toolbar: Toolbar by lazy { findViewById(R.id.toolbar) }
+    private val swipeRefresh: SwipeRefreshLayout by lazy{ findViewById(R.id.swipe_container)}
 
     companion object {
         fun startCompanyListActivity(context: Context) {
@@ -59,14 +62,17 @@ class CompanyListActivity : AppCompatActivity() {
         title = "График акций"
 
         daggerBuilder(companyListRW)
-        companyListRW.layoutManager = LinearLayoutManager(this)
-        companyListRW.adapter = companyListAdapter
-        companyListRW.addItemDecoration(
-            DividerItemDecoration(
-                companyListRW.context,
-                DividerItemDecoration.VERTICAL
-            )
+        initRecyclerView()
+
+        swipeRefresh.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
         )
+        swipeRefresh.setOnRefreshListener {
+            companyListPresenter.onViewCreated()
+        }
 
         val settingsLoad: SharedPreferences = getPreferences(MODE_PRIVATE)
         val sortByNumber = settingsLoad.getInt(Settings.SORT_BY_KEY, 0)
@@ -77,6 +83,17 @@ class CompanyListActivity : AppCompatActivity() {
         update()
     }
 
+    private fun initRecyclerView() {
+        companyListRW.layoutManager = LinearLayoutManager(this)
+        companyListRW.adapter = companyListAdapter
+        companyListRW.addItemDecoration(
+            DividerItemDecoration(
+                companyListRW.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+    }
+
     private fun daggerBuilder(companyListRW: CompanyListViewImpl) {
         DaggerCompanyListComponent.builder()
             .appProvider((application as AppWithFacade).getAppProvider())
@@ -85,6 +102,7 @@ class CompanyListActivity : AppCompatActivity() {
                     .appProvider((application as AppWithFacade).getAppProvider()).build()
             )
             .companyListView(companyListRW)
+            .refreshView(this)
             .build().inject(this)
     }
 
@@ -170,11 +188,9 @@ class CompanyListActivity : AppCompatActivity() {
 
     @SuppressLint("ResourceAsColor")
     private fun update() {
-            companyListPresenter.sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
+        companyListPresenter.sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
         companyListRW.scrollToPosition(0)
-        with(Settings) {
-            updateViewsHeader()
-        }
+        updateViewsHeader()
     }
 
     override fun onResume() {
@@ -182,34 +198,9 @@ class CompanyListActivity : AppCompatActivity() {
         companyListPresenter.onViewResume()
     }
 
-    private fun Settings.updateViewsHeader() {
+    private fun updateViewsHeader() {
         val headerViewState = HeaderViewState(this@CompanyListActivity)
-        when (stateSorting) {
-            SortHandler.StateSort.NAME_RIGHT_FAV_TRUE,
-            SortHandler.StateSort.NAME_RIGHT_FAV_FALSE -> {
-                headerViewState.nameRight()
-            }
-            SortHandler.StateSort.NAME_REVERSE_FAV_TRUE,
-            SortHandler.StateSort.NAME_REVERSE_FAV_FALSE -> {
-                headerViewState.nameRevers()
-            }
-            SortHandler.StateSort.SEC_ID_RIGHT_FAV_TRUE,
-            SortHandler.StateSort.SEC_ID_RIGHT_FAV_FALSE -> {
-                headerViewState.secIdRight()
-            }
-            SortHandler.StateSort.SEC_ID_REVERSE_FAV_TRUE,
-            SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE -> {
-                headerViewState.secIdReverse()
-            }
-            SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE ,
-            SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE ->  {
-                headerViewState.priceRight()
-            }
-            SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE ,
-            SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE -> {
-                headerViewState.priceReverse()
-            }
-        }
+        headerViewState.updateHeaderView()
         headerViewState.selectFavoriteUp()
     }
 
@@ -235,13 +226,6 @@ class CompanyListActivity : AppCompatActivity() {
         return true
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (item.itemId == R.id.action_search) {
-//            Toast.makeText(this, R.string.search_hint, Toast.LENGTH_SHORT).show()
-//        }
-//        return true
-//    }
-
     @SuppressLint("CommitPrefEdits")
     override fun onStop() {
         super.onStop()
@@ -255,6 +239,10 @@ class CompanyListActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         companyListPresenter.onCleared()
+    }
+
+    override fun refreshDone() {
+        swipeRefresh.isRefreshing = false
     }
 
 }

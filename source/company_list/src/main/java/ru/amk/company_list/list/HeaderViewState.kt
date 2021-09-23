@@ -9,6 +9,8 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import ru.amk.company_list.R
+import ru.amk.company_list.Settings
+import ru.amk.company_list.SortHandler
 
 class HeaderViewState(private val activity: Activity) {
 
@@ -24,6 +26,34 @@ class HeaderViewState(private val activity: Activity) {
     private val favoriteUpImageView: ImageView by lazy { activity.findViewById(R.id.favorite_up_image_view) }
     private val favoriteUpCheckBox: CheckBox by lazy { activity.findViewById(R.id.favorite_to_up_switch) }
 
+    fun updateHeaderView(){
+        when (Settings.stateSorting) {
+            SortHandler.StateSort.NAME_RIGHT_FAV_TRUE,
+            SortHandler.StateSort.NAME_RIGHT_FAV_FALSE -> {
+                nameRight()
+            }
+            SortHandler.StateSort.NAME_REVERSE_FAV_TRUE,
+            SortHandler.StateSort.NAME_REVERSE_FAV_FALSE -> {
+                nameRevers()
+            }
+            SortHandler.StateSort.SEC_ID_RIGHT_FAV_TRUE,
+            SortHandler.StateSort.SEC_ID_RIGHT_FAV_FALSE -> {
+                secIdRight()
+            }
+            SortHandler.StateSort.SEC_ID_REVERSE_FAV_TRUE,
+            SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE -> {
+                secIdReverse()
+            }
+            SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE ,
+            SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE ->  {
+                priceRight()
+            }
+            SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE ,
+            SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE -> {
+                priceReverse()
+            }
+        }
+    }
     fun nameRight() {
         sortByNameTextView.setTextColor(setColor(R.color.dark))
         sortBySecidTextView.setTextColor(setColor(R.color.gray600))

@@ -15,7 +15,8 @@ import javax.inject.Inject
 class CompanyListPresenterImpl @Inject constructor(
     private val companyListRepositoryCore: CompanyListRepository,
     private val companyListView: CompanyListView,
-    private val favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCore
+    private val favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCore,
+    private val refreshView:RefreshDataView
 ) : CompanyListPresenter {
 
     private val compositeDisposable = CompositeDisposable()
@@ -53,6 +54,7 @@ class CompanyListPresenterImpl @Inject constructor(
                     filterCompany(filterCompanyName)
                     sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
                     companyListView.notifyAllDataChange(companyList)
+                    refreshView.refreshDone()
                 }, {
                     //TODO add error handler
                 })

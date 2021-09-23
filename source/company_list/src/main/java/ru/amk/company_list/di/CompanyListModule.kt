@@ -3,6 +3,7 @@ package ru.amk.company_list.di
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import ru.amk.company_list.RefreshDataView
 import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.company_list.list.CompanyListPresenterImpl
 import ru.amk.company_list.list.CompanyListViewImpl
@@ -21,9 +22,10 @@ abstract class CompanyListModule {
         fun provideCompanyListPresenter(
             view: CompanyListViewImpl,
             companyListRepository: CompanyListRepositoryImpl,
-            favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCoreImpl
+            favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCoreImpl,
+            refreshView: RefreshDataView
         ): CompanyListPresenter =
-            CompanyListPresenterImpl(companyListRepository, view, favoriteCompanyRepositoryCore)
+            CompanyListPresenterImpl(companyListRepository, view, favoriteCompanyRepositoryCore, refreshView)
     }
 
 
