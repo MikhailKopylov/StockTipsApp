@@ -1,7 +1,6 @@
 package ru.amk.company_list.list
 
 import android.app.Activity
-import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -9,13 +8,13 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import ru.amk.company_list.R
-import ru.amk.company_list.Settings
-import ru.amk.company_list.SortHandler
+import ru.amk.company_list.list.handlers.SortHandler
+import ru.amk.company_list.list.handlers.StateSort
 
 class HeaderViewState(private val activity: Activity) {
 
     private val sortByNameTextView: TextView by lazy { activity.findViewById(R.id.sort_by_name_text_view) }
-    private val sortBySecidTextView: TextView by lazy { activity.findViewById(R.id.sort_by_secid_text_view) }
+    private val sortBySecIdTextView: TextView by lazy { activity.findViewById(R.id.sort_by_secid_text_view) }
     private val sortByPriceTextView: TextView by lazy { activity.findViewById(R.id.sort_by_price_text_view) }
     private val nameRightImageButton: ImageButton by lazy { activity.findViewById(R.id.name_right_order_image_button) }
     private val nameReverseImageButton: ImageButton by lazy { activity.findViewById(R.id.name_reverse_order_image_button) }
@@ -26,37 +25,62 @@ class HeaderViewState(private val activity: Activity) {
     private val favoriteUpImageView: ImageView by lazy { activity.findViewById(R.id.favorite_up_image_view) }
     private val favoriteUpCheckBox: CheckBox by lazy { activity.findViewById(R.id.favorite_to_up_switch) }
 
-    fun updateHeaderView(){
-        when (Settings.stateSorting) {
-            SortHandler.StateSort.NAME_RIGHT_FAV_TRUE,
-            SortHandler.StateSort.NAME_RIGHT_FAV_FALSE -> {
-                nameRight()
+    fun updateHeaderView() {
+        when (SortHandler.stateSorting) {
+            StateSort.NAME_ASC_FAV_TRUE -> {
+                nameAsc()
+                favoriteUp()
             }
-            SortHandler.StateSort.NAME_REVERSE_FAV_TRUE,
-            SortHandler.StateSort.NAME_REVERSE_FAV_FALSE -> {
-                nameRevers()
+            StateSort.NAME_ASC_FAV_FALSE -> {
+                nameAsc()
+                favoriteNotUp()
             }
-            SortHandler.StateSort.SEC_ID_RIGHT_FAV_TRUE,
-            SortHandler.StateSort.SEC_ID_RIGHT_FAV_FALSE -> {
-                secIdRight()
+            StateSort.NAME_DESC_FAV_TRUE -> {
+                nameDesc()
+                favoriteUp()
             }
-            SortHandler.StateSort.SEC_ID_REVERSE_FAV_TRUE,
-            SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE -> {
-                secIdReverse()
+            StateSort.NAME_DESC_FAV_FALSE -> {
+                nameDesc()
+                favoriteNotUp()
             }
-            SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE ,
-            SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE ->  {
-                priceRight()
+            StateSort.SEC_ID_ASC_FAV_TRUE -> {
+                secIdAsc()
+                favoriteUp()
             }
-            SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE ,
-            SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE -> {
-                priceReverse()
+            StateSort.SEC_ID_ASC_FAV_FALSE -> {
+                secIdAsc()
+                favoriteNotUp()
+            }
+            StateSort.SEC_ID_DESC_FAV_TRUE -> {
+                secIdDesc()
+                favoriteUp()
+            }
+            StateSort.SEC_ID_DESC_FAV_FALSE -> {
+                secIdDesc()
+                favoriteNotUp()
+            }
+            StateSort.PRICE_ASC_FAV_TRUE -> {
+                priceAsc()
+                favoriteUp()
+            }
+            StateSort.PRICE_ASC_FAV_FALSE -> {
+                priceAsc()
+                favoriteNotUp()
+            }
+            StateSort.PRICE_DESC_FAV_TRUE -> {
+                priceDesc()
+                favoriteUp()
+            }
+            StateSort.PRICE_DESC_FAV_FALSE -> {
+                priceDesc()
+                favoriteNotUp()
             }
         }
     }
-    fun nameRight() {
+
+    private fun nameAsc() {
         sortByNameTextView.setTextColor(setColor(R.color.dark))
-        sortBySecidTextView.setTextColor(setColor(R.color.gray600))
+        sortBySecIdTextView.setTextColor(setColor(R.color.gray600))
         sortByPriceTextView.setTextColor(setColor(R.color.gray600))
         nameRightImageButton.setImageResource(R.drawable.select_right)
         nameReverseImageButton.setImageResource(R.drawable.not_select_reverse)
@@ -66,9 +90,9 @@ class HeaderViewState(private val activity: Activity) {
         priceReverseImageButton.setImageResource(R.drawable.not_select_reverse)
     }
 
-    fun nameRevers() {
+    private fun nameDesc() {
         sortByNameTextView.setTextColor(setColor(R.color.dark))
-        sortBySecidTextView.setTextColor(setColor(R.color.gray600))
+        sortBySecIdTextView.setTextColor(setColor(R.color.gray600))
         sortByPriceTextView.setTextColor(setColor(R.color.gray600))
         nameRightImageButton.setImageResource(R.drawable.not_select_right)
         nameReverseImageButton.setImageResource(R.drawable.select_reverse)
@@ -78,9 +102,9 @@ class HeaderViewState(private val activity: Activity) {
         priceReverseImageButton.setImageResource(R.drawable.not_select_reverse)
     }
 
-    fun secIdRight() {
+    private fun secIdAsc() {
         sortByNameTextView.setTextColor(setColor(R.color.gray600))
-        sortBySecidTextView.setTextColor(setColor(R.color.dark))
+        sortBySecIdTextView.setTextColor(setColor(R.color.dark))
         sortByPriceTextView.setTextColor(setColor(R.color.gray600))
         nameRightImageButton.setImageResource(R.drawable.not_select_right)
         nameReverseImageButton.setImageResource(R.drawable.not_select_reverse)
@@ -90,9 +114,9 @@ class HeaderViewState(private val activity: Activity) {
         priceReverseImageButton.setImageResource(R.drawable.not_select_reverse)
     }
 
-    fun secIdReverse() {
+    private fun secIdDesc() {
         sortByNameTextView.setTextColor(setColor(R.color.gray600))
-        sortBySecidTextView.setTextColor(setColor(R.color.dark))
+        sortBySecIdTextView.setTextColor(setColor(R.color.dark))
         sortByPriceTextView.setTextColor(setColor(R.color.gray600))
         nameRightImageButton.setImageResource(R.drawable.not_select_right)
         nameReverseImageButton.setImageResource(R.drawable.not_select_reverse)
@@ -102,9 +126,9 @@ class HeaderViewState(private val activity: Activity) {
         priceReverseImageButton.setImageResource(R.drawable.not_select_reverse)
     }
 
-    fun priceRight() {
+    private fun priceAsc() {
         sortByNameTextView.setTextColor(setColor(R.color.gray600))
-        sortBySecidTextView.setTextColor(setColor(R.color.gray600))
+        sortBySecIdTextView.setTextColor(setColor(R.color.gray600))
         sortByPriceTextView.setTextColor(setColor(R.color.dark))
         nameRightImageButton.setImageResource(R.drawable.not_select_right)
         nameReverseImageButton.setImageResource(R.drawable.not_select_reverse)
@@ -114,9 +138,9 @@ class HeaderViewState(private val activity: Activity) {
         priceReverseImageButton.setImageResource(R.drawable.not_select_reverse)
     }
 
-    fun priceReverse(){
+    private fun priceDesc() {
         sortByNameTextView.setTextColor(setColor(R.color.gray600))
-        sortBySecidTextView.setTextColor(setColor(R.color.gray600))
+        sortBySecIdTextView.setTextColor(setColor(R.color.gray600))
         sortByPriceTextView.setTextColor(setColor(R.color.dark))
         nameRightImageButton.setImageResource(R.drawable.not_select_right)
         nameReverseImageButton.setImageResource(R.drawable.not_select_reverse)
@@ -132,13 +156,16 @@ class HeaderViewState(private val activity: Activity) {
         id
     )
 
+    private fun favoriteUp() {
+        favoriteUpCheckBox.isChecked = true
+        favoriteUpImageView.setImageResource(R.drawable.arrow_up_select)
 
-    fun selectFavoriteUp() {
-        if (favoriteUpCheckBox.isChecked) {
-            favoriteUpImageView.setImageResource(R.drawable.arrow_up_select)
-        } else {
-            favoriteUpImageView.setImageResource(R.drawable.arrow_up_not_select)
-        }
+    }
+
+    private fun favoriteNotUp() {
+        favoriteUpCheckBox.isChecked = false
+        favoriteUpImageView.setImageResource(R.drawable.arrow_up_not_select)
+
     }
 
 }

@@ -23,15 +23,21 @@ import ru.amk.company_list.list.CompanyListAdapter
 import ru.amk.company_list.list.CompanyListPresenter
 import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.company_list.list.HeaderViewState
+import ru.amk.company_list.list.handlers.SortHandler
+import ru.amk.company_list.list.handlers.SortedBy
+import ru.amk.company_list.list.handlers.StateSort
 import ru.amk.core.di.AppWithFacade
 import ru.amk.core.di.DaggerCoreComponent
 import javax.inject.Inject
 
-interface RefreshDataView{
-    fun refreshDone()
-}
-class CompanyListActivity : AppCompatActivity(), RefreshDataView {
 
+interface ActivityView {
+    fun refreshDone()
+    fun getPreference(): SharedPreferences
+    fun updateViewsHeader()
+}
+
+class CompanyListActivity : AppCompatActivity(), ActivityView {
 
     @Inject
     lateinit var companyListAdapter: CompanyListAdapter
@@ -45,7 +51,7 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
     private val sortByPriceTextView: TextView by lazy { findViewById(R.id.sort_by_price_text_view) }
     private val favoriteToUpCheckBox: CheckBox by lazy { findViewById(R.id.favorite_to_up_switch) }
     private val toolbar: Toolbar by lazy { findViewById(R.id.toolbar) }
-    private val swipeRefresh: SwipeRefreshLayout by lazy{ findViewById(R.id.swipe_container)}
+    private val swipeRefresh: SwipeRefreshLayout by lazy { findViewById(R.id.swipe_container) }
 
     companion object {
         fun startCompanyListActivity(context: Context) {
@@ -74,13 +80,12 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
             companyListPresenter.onViewCreated()
         }
 
-        val settingsLoad: SharedPreferences = getPreferences(MODE_PRIVATE)
-        val sortByNumber = settingsLoad.getInt(Settings.SORT_BY_KEY, 0)
-        Settings.sortedBy = enumValues<SortedBy>()[sortByNumber]
-        Settings.favoriteUp = settingsLoad.getBoolean(Settings.FAVORITE_UP_KEY, false)
-        checkFavoriteToUp()
-        sorted()
-        update()
+        val settingsLoad: SharedPreferences = getPreference()
+        val stateSort = settingsLoad.getInt(SortHandler.STATE_SORT, 0)
+        SortHandler.fromState(enumValues<StateSort>()[stateSort])
+
+        sortedListener()
+        favoriteUpListener()
     }
 
     private fun initRecyclerView() {
@@ -92,6 +97,7 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
                 DividerItemDecoration.VERTICAL
             )
         )
+        companyListRW.scrollToPosition(0)
     }
 
     private fun daggerBuilder(companyListRW: CompanyListViewImpl) {
@@ -106,102 +112,41 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
             .build().inject(this)
     }
 
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("InflateParams", "ResourceAsColor")
-    private fun sorted() {
-        with(Settings) {
-            sortByNameTextView.setOnClickListener {
-                sortedBy = SortedBy.NAME
-                orderBy = when (stateSorting) {
-                    SortHandler.StateSort.NAME_REVERSE_FAV_FALSE, SortHandler.StateSort.NAME_REVERSE_FAV_TRUE -> {
-                        OrderBy.RIGHT
-                    }
-                    SortHandler.StateSort.NAME_RIGHT_FAV_FALSE, SortHandler.StateSort.NAME_RIGHT_FAV_TRUE -> {
-                        OrderBy.REVERS
-                    }
-                    else -> {
-                        OrderBy.RIGHT
-                    }
-                }
-                update()
-            }
-            sortBySecidTextView.setOnClickListener {
-                sortedBy = SortedBy.SEC_ID
-                orderBy = when (stateSorting) {
-                    SortHandler.StateSort.SEC_ID_REVERSE_FAV_FALSE, SortHandler.StateSort.SEC_ID_REVERSE_FAV_TRUE -> {
-                        OrderBy.RIGHT
-                    }
-                    SortHandler.StateSort.SEC_ID_RIGHT_FAV_FALSE, SortHandler.StateSort.SEC_ID_RIGHT_FAV_TRUE -> {
-                        OrderBy.REVERS
-                    }
-                    else -> {
-                        OrderBy.RIGHT
-                    }
-                }
-                update()
-            }
-            sortByPriceTextView.setOnClickListener {
-                sortedBy = SortedBy.PRICE
-                orderBy = when (stateSorting) {
-                    SortHandler.StateSort.PRICE_REVERSE_FAV_FALSE, SortHandler.StateSort.PRICE_REVERSE_FAV_TRUE -> {
-                        OrderBy.RIGHT
-                    }
-                    SortHandler.StateSort.PRICE_RIGHT_FAV_FALSE, SortHandler.StateSort.PRICE_RIGHT_FAV_TRUE -> {
-                        OrderBy.REVERS
-                    }
-                    else -> {
-                        OrderBy.RIGHT
-                    }
-                }
-                update()
-            }
-
+    private fun sortedListener() {
+        sortByNameTextView.setOnClickListener {
+            companyListPresenter.clickSorting(SortedBy.NAME)
         }
+        sortBySecidTextView.setOnClickListener {
+            companyListPresenter.clickSorting(SortedBy.SEC_ID)
+        }
+        sortByPriceTextView.setOnClickListener {
+            companyListPresenter.clickSorting(SortedBy.PRICE)
+        }
+
     }
 
-
-    private fun checkFavoriteToUp() {
-        if (Settings.favoriteUp) {
-            findViewById<CheckBox>(R.id.favorite_to_up_switch).isChecked = true
-        }
+    private fun favoriteUpListener() {
         favoriteToUpCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            Settings.favoriteUp = isChecked
-            update()
+            companyListPresenter.clickFavoriteUp(isChecked)
         }
         findViewById<ImageView>(R.id.favorite_image_view).setOnClickListener {
-            Settings.favoriteUp = reverseToUp()
-            favoriteToUpCheckBox.isChecked = Settings.favoriteUp
-            update()
+            SortHandler.changeFavoriteUp()
         }
         findViewById<ImageView>(R.id.favorite_up_image_view).setOnClickListener {
-            Settings.favoriteUp = reverseToUp()
-            favoriteToUpCheckBox.isChecked = Settings.favoriteUp
-            update()
+            SortHandler.changeFavoriteUp()
         }
-
     }
 
-    private fun reverseToUp(): Boolean {
-        return !favoriteToUpCheckBox.isChecked
+    override fun onStart() {
+        super.onStart()
+        companyListPresenter.onViewCreated()
     }
 
-    @SuppressLint("ResourceAsColor")
-    private fun update() {
-        companyListPresenter.sortBy(Settings.sortedBy, Settings.orderBy, Settings.favoriteUp)
-        companyListRW.scrollToPosition(0)
-        updateViewsHeader()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        companyListPresenter.onViewResume()
-    }
-
-    private fun updateViewsHeader() {
+    override fun updateViewsHeader() {
         val headerViewState = HeaderViewState(this@CompanyListActivity)
         headerViewState.updateHeaderView()
-        headerViewState.selectFavoriteUp()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -229,11 +174,7 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
     @SuppressLint("CommitPrefEdits")
     override fun onStop() {
         super.onStop()
-        val sharedPref: SharedPreferences = getPreferences(MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = sharedPref.edit()
-        editor.putInt(Settings.SORT_BY_KEY, Settings.sortedBy.ordinal)
-        editor.putBoolean(Settings.FAVORITE_UP_KEY, Settings.favoriteUp)
-        editor.apply()
+        companyListPresenter.viewOnStop()
     }
 
     override fun onDestroy() {
@@ -244,5 +185,7 @@ class CompanyListActivity : AppCompatActivity(), RefreshDataView {
     override fun refreshDone() {
         swipeRefresh.isRefreshing = false
     }
+
+    override fun getPreference(): SharedPreferences = getPreferences(MODE_PRIVATE)
 
 }

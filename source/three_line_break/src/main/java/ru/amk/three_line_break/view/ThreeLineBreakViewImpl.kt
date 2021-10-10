@@ -64,7 +64,6 @@ class ThreeLineBreakViewImpl @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         if (threeLineBreaks.isNotEmpty()) {
             currentX = 0
-//            heightPerValue = coordZeroY / threeLineBreaks.diffThreeLine()
 
             canvas?.let { onDrawCoordinateGrid(canvas) }
             for ((index, item) in threeLineBreaks.withIndex()) {

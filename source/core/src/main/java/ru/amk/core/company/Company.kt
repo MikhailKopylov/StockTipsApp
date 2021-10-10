@@ -9,7 +9,22 @@ data class CompanyWithoutChangePrice(
     val secId: String,
     val date:String,
     val lastPrice:Double
-):Parcelable
+):Parcelable{
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Company
+
+        if (secId != other.secId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return secId.hashCode()
+    }
+}
 
 
 @Parcelize
@@ -20,5 +35,21 @@ data class Company(
     val lastPrice:Double,
     val changePrice:Double,
     val changePricePercent:Double
-):Parcelable
+):Parcelable{
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Company
+
+        if (secId != other.secId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return secId.hashCode()
+    }
+}
 

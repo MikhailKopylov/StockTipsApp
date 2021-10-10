@@ -3,7 +3,7 @@ package ru.amk.company_list.di
 import dagger.BindsInstance
 import dagger.Component
 import ru.amk.company_list.CompanyListActivity
-import ru.amk.company_list.RefreshDataView
+import ru.amk.company_list.ActivityView
 import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.core.di.ActivityScope
 import ru.amk.core.di.AppProvider
@@ -31,6 +31,7 @@ interface CompanyListComponent {
         fun appProvider(appProvider: AppProvider): CompanyListComponentBuilder
 
         @BindsInstance
-        fun refreshView(refreshView:RefreshDataView):CompanyListComponentBuilder
+        fun refreshView(refreshView:ActivityView):CompanyListComponentBuilder
+
     }
 }

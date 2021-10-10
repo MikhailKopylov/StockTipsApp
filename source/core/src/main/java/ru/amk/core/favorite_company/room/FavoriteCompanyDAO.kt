@@ -7,10 +7,10 @@ import io.reactivex.Flowable
 @Dao
 interface FavoriteCompanyDAO {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(company: RoomCompany)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addAll(vararg company: RoomCompany)
 
     @Query("DELETE FROM companies WHERE secId=(:secId)")

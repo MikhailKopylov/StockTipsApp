@@ -8,4 +8,19 @@ import ru.amk.core.company.Company
 data class FavoriteCompany(
     val company:Company,
     val isFavorite:Boolean
-): Parcelable
+): Parcelable{
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as FavoriteCompany
+
+        if (company != other.company) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return company.hashCode()
+    }
+}

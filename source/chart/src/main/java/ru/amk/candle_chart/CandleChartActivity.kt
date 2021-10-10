@@ -12,7 +12,6 @@ import android.view.MenuItem
 import android.view.View.*
 import android.widget.HorizontalScrollView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -174,12 +173,6 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
         chartPresenter.changeFavoriteStatus(isFavorite, company)
     }
 
-    @SuppressLint("SimpleDateFormat")
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun currentDay() = LocalDate.parse(
-            SimpleDateFormat("yyyy-MM-dd").format(Date())
-    ).minusDays(1L).toString()
-
     override fun setPrice(price: String) {
         lastPriceTextView.text = price
     }
@@ -189,7 +182,9 @@ class CandleChartActivity : AppCompatActivity(), ChartView {
         changePriceTextView.setTextColor(color.paint.color)
     }
 
-
+    override fun onBackPressed() {
+        super.getOnBackPressedDispatcher().onBackPressed()
+    }
 }
 
 

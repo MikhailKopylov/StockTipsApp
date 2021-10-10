@@ -18,10 +18,6 @@ class CompanyListAdapter @Inject constructor(
     val appProvider: AppProvider
 ) :
     RecyclerView.Adapter<BaseViewHolder>() {
-    init {
-        companyListPresenter.onViewCreated()
-    }
-
 
     inner class CompanyViewHolder(itemView: View) :
         BaseViewHolder(itemView), View.OnClickListener {

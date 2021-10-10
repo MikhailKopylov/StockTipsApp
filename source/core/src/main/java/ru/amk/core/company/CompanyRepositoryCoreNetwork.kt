@@ -74,13 +74,13 @@ class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleSer
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getCompanyWithoutChangePrice(date: String): Single<Map<String, CompanyWithoutChangePrice>> {
-        val listCompany = mutableMapOf<String, CompanyWithoutChangePrice>()
+        val mapCompany = mutableMapOf<String, CompanyWithoutChangePrice>()
         return moexCandleServiceNetwork
             .getMoexCandleServiceAllCompany(START_PAGE, date)
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {
-                    listCompany[item.SECID] = CompanyWithoutChangePrice(
+                    mapCompany[item.SECID] = CompanyWithoutChangePrice(
                         item.SHORTNAME,
                         item.SECID,
                         item.TRADEDATE,
@@ -88,11 +88,11 @@ class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleSer
                     )
                 }
                 //Если выходной, то поиск последнего рабочего дня
-                if (listCompany.isEmpty()) {
+                if (mapCompany.isEmpty()) {
                     _prevDate = LocalDate.parse(date).minusDays(1L).toString()
                     getCompanyWithoutChangePrice(_prevDate)
                 } else {
-                    Single.just(listCompany)
+                    Single.just(mapCompany)
                 }
             }
     }
