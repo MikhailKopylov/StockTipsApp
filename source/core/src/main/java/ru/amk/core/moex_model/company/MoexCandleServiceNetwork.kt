@@ -4,11 +4,11 @@ import io.reactivex.Single
 
 interface MoexCandleServiceNetwork {
 
-    fun getMoexCandleServiceAllCompany(pageNumber:Int, date:String): Single<MoexCandleRaw>
+    fun getAllCompany(pageNumber:Int, date:String): Single<MoexCompanyRaw>
     fun getMoexCandleServiceByCompany(
         secId: String,
         dataFrom: String,
         dataTill: String
-    ): Single<MoexCandleRaw>
+    ): Single<MoexCompanyRaw>
 
 }

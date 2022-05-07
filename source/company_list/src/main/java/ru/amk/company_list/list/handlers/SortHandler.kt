@@ -49,7 +49,7 @@ object SortHandler {
         Observable.combineLatest(observableSorted, observableFavoriteUp, { _, favoriteUp ->
             stateSorting = sortHandler.toState(sortedBy, orderBy, favoriteUp)
             return@combineLatest stateSorting
-        }).toFlowable(BackpressureStrategy.DROP)
+        }).toFlowable(BackpressureStrategy.LATEST)
 
     fun fromState(stateSort: StateSort) {
         when (stateSort) {

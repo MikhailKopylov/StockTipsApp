@@ -1,11 +1,11 @@
 package ru.amk.core.moex_model.company
 
-class CreateMoexCandle(private val moexCandleRaw: MoexCandleRaw) {
+class CreateMoexCandle(private val moexCompanyRaw: MoexCompanyRaw) {
 
     fun convertFromRaw(): List<MoexData> {
 
         val list = mutableListOf<MoexData>()
-        for (item in moexCandleRaw.history.data) {
+        for (item in moexCompanyRaw.history.data) {
             if (isExistStockQuote(item) && isExistDateAndName(item)) {
                 list.add(
                     MoexData(

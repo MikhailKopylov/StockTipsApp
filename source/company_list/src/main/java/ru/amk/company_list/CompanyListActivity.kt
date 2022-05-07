@@ -65,7 +65,7 @@ class CompanyListActivity : AppCompatActivity(), ActivityView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_list)
         setSupportActionBar(toolbar)
-        title = "График акций"
+        title = getString(R.string.list_company)
 
         daggerBuilder(companyListRW)
         initRecyclerView()

@@ -1,6 +1,6 @@
 package ru.amk.core.moex_model.company
 
-import android.annotation.SuppressLint
+import android.util.Log
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 import ru.amk.core.moex_model.company.json.History
@@ -9,58 +9,76 @@ import javax.inject.Inject
 const val START_PAGE = 0
 const val NEXT_PAGE = 100
 
-class MoexCandleServiceNetworkImpl @Inject constructor (private val moexCandleService: MoexCandleService) :
+class MoexCandleServiceNetworkImpl @Inject constructor(private val companiesService: MoexCandleService) :
     MoexCandleServiceNetwork {
 
 
-    @SuppressLint("CheckResult")
-    override fun getMoexCandleServiceAllCompany(
-        pageNumber: Int,
-        date: String
-    ): Single<MoexCandleRaw> =
-        moexCandleService.getMoexCandleAllCompanyByPage(pageNumber, date)
-            .flatMap {
-                //Загрузка и объединение всех страниц
-                val index = it.cursor.data[0][0]
-                val total = it.cursor.data[0][1]
-                if (index < total) {
-                    Single.just(it)
-                        .zipWith(
-                            getMoexCandleServiceAllCompany(pageNumber + NEXT_PAGE, date)
-                        ) { a, b ->
-                            mergeMoexCandlePage(a, b)
-                        }
-                } else {
-                    Single.just(it)
-                }
-            }
-            .subscribeOn(Schedulers.io())
+//    @SuppressLint("CheckResult")
+//    override fun getAllCompany(
+//        pageNumber: Int,
+//        date: String
+//    ): Single<MoexCandleRaw> =
+//        companiesService.getCompaniesByPage(pageNumber, date)
+//            .flatMap {
+//                //Загрузка и объединение всех страниц
+//                val index = it.cursor.data[0][0]
+//                val total = it.cursor.data[0][1]
+//                if (index < total) {
+//                    Single.just(it)
+//                        .zipWith(getAllCompany(pageNumber + NEXT_PAGE, date)) { current, next ->
+//                            mergePages(current, next)
+//                        }
+//                } else {
+//                    Single.just(it)
+//                }
+//            }
+//            .subscribeOn(Schedulers.io())
 
     override fun getMoexCandleServiceByCompany(
         secId: String,
         dataFrom: String,
         dataTill: String
-    ): Single<MoexCandleRaw> =
-        moexCandleService.getMoexCandleByCompany(secId, dataFrom, dataTill)
+    ): Single<MoexCompanyRaw> =
+        companiesService.getMoexCandleByCompany(secId, dataFrom, dataTill)
 
-    private fun mergeMoexCandlePage(
-        moexCandleRaw: MoexCandleRaw,
-        moexCandleRaw2: MoexCandleRaw?,
-    ): MoexCandleRaw {
+    private fun mergePages(
+        moexCompanyRaw: MoexCompanyRaw,
+        moexCompanyRaw2: MoexCompanyRaw?,
+    ): MoexCompanyRaw {
 
         val data = mutableListOf<List<Any>>()
 
-        data.addAll(moexCandleRaw.history.data)
-        moexCandleRaw2?.let { data.addAll(moexCandleRaw2.history.data) }
+        data.addAll(moexCompanyRaw.history.data)
+        moexCompanyRaw2?.let { data.addAll(moexCompanyRaw2.history.data) }
         data.distinct()
         val resultData: List<List<Any>> = data
         val history = History(
-            moexCandleRaw.history.columns,
+            moexCompanyRaw.history.columns,
             data = resultData,
-            moexCandleRaw.history.metadata
+            moexCompanyRaw.history.metadata
         )
-        return MoexCandleRaw(history, moexCandleRaw.cursor)
+        return MoexCompanyRaw(history, moexCompanyRaw.cursor)
     }
+
+    override fun getAllCompany(pageNumber: Int, date: String): Single<MoexCompanyRaw> =
+        companiesService.getCompaniesByPage(pageNumber, date)
+            //Загрузка и объединение всех страниц
+            .flatMap { companyListRaw ->
+                val index = companyListRaw.cursor.data[0][0]
+                val total = companyListRaw.cursor.data[0][1]
+                val pageSize = companyListRaw.cursor.data[0][2]
+
+                if (index < total) {
+                    Single.just(companyListRaw)
+                        .zipWith(getAllCompany(pageNumber + pageSize, date)) { current, next ->
+                            mergePages(current, next)
+                        }
+                } else {
+                    Single.just(companyListRaw)
+                }
+
+            }
+
 }
 
 

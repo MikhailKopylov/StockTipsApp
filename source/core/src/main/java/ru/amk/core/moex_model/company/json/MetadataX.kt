@@ -6,6 +6,6 @@ import ru.amk.core.moex_model.company.json.metadata.TOTAL
 
 data class MetadataX(
     val INDEX: INDEX,
+    val TOTAL: TOTAL,
     val PAGESIZE: PAGESIZE,
-    val TOTAL: TOTAL
 )

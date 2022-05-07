@@ -15,7 +15,7 @@ class FilterCompanyInteractor @Inject constructor(
     override fun getCompanies(): Flowable<List<FavoriteCompany>> {
         val filterFlowable = FilterHandler.filterObserve.switchMap {
             Observable.just(it)
-        }.toFlowable(BackpressureStrategy.DROP)
+        }.toFlowable(BackpressureStrategy.LATEST)
         return Flowable.combineLatest(
             sortCompanyInteractor.getCompanies(),
             filterFlowable,
