@@ -22,18 +22,18 @@ class FavoriteCompanyInteractor @Inject constructor(
 
     override fun getCompanies(): Flowable<List<FavoriteCompany>> =
         Flowable
-            .combineLatest(favoriteObservable, allObservable.toFlowable(),
-                { favorite, all ->
-                    val result = mutableSetOf<FavoriteCompany>()
-                    all.map {
-                        val favoriteCompany = if (favorite.contains(it)) {
-                            FavoriteCompany(it, true)
-                        } else {
-                            FavoriteCompany(it, false)
-                        }
-                        result.add(favoriteCompany)
+            .combineLatest(favoriteObservable, allObservable.toFlowable()
+            ) { favorite, all ->
+                val result = mutableSetOf<FavoriteCompany>()
+                all.map {
+                    val favoriteCompany = if (favorite.contains(it)) {
+                        FavoriteCompany(it, true)
+                    } else {
+                        FavoriteCompany(it, false)
                     }
-                    result.toList()
-                })
+                    result.add(favoriteCompany)
+                }
+                result.toList()
+            }
 
 }

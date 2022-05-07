@@ -18,16 +18,16 @@ class FilterCompanyInteractor @Inject constructor(
         }.toFlowable(BackpressureStrategy.LATEST)
         return Flowable.combineLatest(
             sortCompanyInteractor.getCompanies(),
-            filterFlowable,
-            { companyList, filterQuery ->
-                if (filterQuery.isEmpty()) {
-                    companyList
-                } else {
-                    companyList.filter {
-                        it.company.shortName.contains(filterQuery, true) ||
-                                it.company.secId.contains(filterQuery, true)
-                    }
+            filterFlowable
+        ) { companyList, filterQuery ->
+            if (filterQuery.isEmpty()) {
+                companyList
+            } else {
+                companyList.filter {
+                    it.company.shortName.contains(filterQuery, true) ||
+                            it.company.secId.contains(filterQuery, true)
                 }
-            })
+            }
+        }
     }
 }
