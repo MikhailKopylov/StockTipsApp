@@ -11,7 +11,7 @@ class CreateMoexCandleTest  {
 
     @Test
     fun `create moexData`() {
-        val sourceMoexCandleRaw = MoexCandleRaw(
+        val sourceMoexCandleRaw = MoexCompanyRaw(
             History(
                 emptyList(),
                 listOf(
@@ -68,7 +68,7 @@ class CreateMoexCandleTest  {
                         ("")
                 )
             ),
-            HistoryCursor(emptyList(), emptyList(), MetadataX(INDEX(""), PAGESIZE(""), TOTAL("")))
+            HistoryCursor(emptyList(), emptyList(), MetadataX(INDEX(""), TOTAL(""), PAGESIZE("")))
         )
         val d = CreateMoexCandle(sourceMoexCandleRaw).convertFromRaw()
         val result = listOf<MoexData>(

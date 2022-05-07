@@ -1,21 +1,23 @@
 package ru.amk.company_list.list.interactors
 
 import io.reactivex.Flowable
+import io.reactivex.schedulers.Schedulers
 import ru.amk.company_list.FavoriteCompany
 import ru.amk.core.company.CompanyRepositoryCore
 import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCore
 import javax.inject.Inject
 
-class FavoriteCompanyInteractor  @Inject  constructor(
+class FavoriteCompanyInteractor @Inject constructor(
     private val companyListRepositoryCore: CompanyRepositoryCore,
     private val favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCore
-):CompanyInteractor {
+) : CompanyInteractor {
 
     private val favoriteObservable by lazy {
         favoriteCompanyRepositoryCore.getFavoriteCompanyList()
     }
     private val allObservable by lazy {
         companyListRepositoryCore.getCompanyList(companyListRepositoryCore.getCurrentDate())
+            .subscribeOn(Schedulers.io())
     }
 
     override fun getCompanies(): Flowable<List<FavoriteCompany>> =

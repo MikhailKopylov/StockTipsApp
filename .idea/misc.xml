@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/StockTipsApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.4453125" />
+        <entry key="..\:/AndroidProjects/StockTipsApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.4453125" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/candle_chart/src/main/res/layout/activity_candle_chart.xml" value="0.25" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/chart/src/main/res/drawable-hdpi/non_favorite.xml" value="0.43846153846153846" />
         <entry key="..\:/AndroidProjects/StockTipsApp/source/chart/src/main/res/drawable-mdpi/favorite.xml" value="0.43846153846153846" />

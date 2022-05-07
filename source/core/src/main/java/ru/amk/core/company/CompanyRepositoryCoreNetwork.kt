@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import ru.amk.core.moex_model.company.CreateMoexCandle
 import ru.amk.core.moex_model.company.MoexCandleServiceNetwork
 import ru.amk.core.moex_model.company.START_PAGE
@@ -76,7 +77,7 @@ class CompanyRepositoryCoreNetwork @Inject constructor(private val moexCandleSer
     private fun getCompanyWithoutChangePrice(date: String): Single<Map<String, CompanyWithoutChangePrice>> {
         val mapCompany = mutableMapOf<String, CompanyWithoutChangePrice>()
         return moexCandleServiceNetwork
-            .getMoexCandleServiceAllCompany(START_PAGE, date)
+            .getAllCompany(START_PAGE, date)
             .flatMap { moexCandleRaw ->
                 val moexCandle = CreateMoexCandle(moexCandleRaw)
                 for (item in moexCandle.convertFromRaw()) {
