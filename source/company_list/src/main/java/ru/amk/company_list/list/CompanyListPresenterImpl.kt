@@ -12,6 +12,7 @@ import ru.amk.company_list.list.handlers.SortHandler
 import ru.amk.company_list.list.handlers.SortedBy
 import ru.amk.company_list.list.interactors.CompanyInteractor
 import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCore
+import ru.amk.core.utils.SchedulerProvider
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,6 +22,7 @@ class CompanyListPresenterImpl @Inject constructor(
     private val companyListView: CompanyListView,
     private val favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCore,
     private val activityView: ActivityView,
+    private val schedulerProvider: SchedulerProvider
 ) : CompanyListPresenter {
 
     private val compositeDisposable = CompositeDisposable()
@@ -31,8 +33,8 @@ class CompanyListPresenterImpl @Inject constructor(
     override fun onViewCreated() {
         compositeDisposable.add(
             filterInteractor.getCompanies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.result())
                 .subscribe({
                     companyList = it
                     sourceCompanyList = it

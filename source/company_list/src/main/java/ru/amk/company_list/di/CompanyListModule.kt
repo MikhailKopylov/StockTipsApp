@@ -10,6 +10,7 @@ import ru.amk.company_list.list.CompanyListViewImpl
 import ru.amk.company_list.list.interactors.*
 import ru.amk.core.di.ActivityScope
 import ru.amk.core.favorite_company.FavoriteCompanyRepositoryCoreImpl
+import ru.amk.core.utils.SchedulerProvider
 import javax.inject.Named
 
 @Module
@@ -23,8 +24,9 @@ abstract class CompanyListModule {
             view: CompanyListViewImpl,
             favoriteCompanyRepositoryCore: FavoriteCompanyRepositoryCoreImpl,
             refreshView: ActivityView,
+            schedulerProvider: SchedulerProvider,
         ): CompanyListPresenter =
-            CompanyListPresenterImpl(sortInteractor, view, favoriteCompanyRepositoryCore, refreshView)
+            CompanyListPresenterImpl(sortInteractor, view, favoriteCompanyRepositoryCore, refreshView, schedulerProvider)
 
     }
 
